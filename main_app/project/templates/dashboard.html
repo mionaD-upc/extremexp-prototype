@@ -1,0 +1,863 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if current_user.is_authenticated %}
+    <h1 class="title">Dashboard</h1>
+    <section class="section has-background-dark" style="padding: 1rem;">
+        <div class="container">
+            <div class="is-flex is-justify-content-center is-align-items-center steps-container">
+                <div class="step is-flex is-align-items-center">
+                    <div id="circle_dashboard" class="circle mr-4 is-inline-flex is-justify-content-center is-align-items-center has-text-weight-bold has-background-grey-dark">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-lg" viewBox="0 0 16 16">
+                            <path d="m9.708 6.075-3.024.379-.108.502.595.108c.387.093.464.232.38.619l-.975 4.577c-.255 1.183.14 1.74 1.067 1.74.72 0 1.554-.332 1.933-.789l.116-.549c-.263.232-.65.325-.905.325-.363 0-.494-.255-.402-.704zm.091-2.755a1.32 1.32 0 1 1-2.64 0 1.32 1.32 0 0 1 2.64 0"/>
+                        </svg>
+                    </div>
+                    <button class="step-text button is-light">Dashboard Manual</button>
+                </div>              
+                <span class="arrow mx-4">
+                    <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path opacity="0.5" d="M10.6667 1.16669L16.5 7.00002M16.5 7.00002L10.6667 12.8334M16.5 7.00002L1.5 7.00002" stroke="#84878A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </span>
+                <div class="step is-flex is-align-items-center">
+                    <div id="circle_upload" class="circle mr-4 is-inline-flex is-justify-content-center is-align-items-center has-text-weight-bold has-background-grey-dark">1</div>
+                    <button class="step-text button is-light">Upload Data</button>
+                </div>
+                <span class="arrow mx-4">
+                    <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path opacity="0.5" d="M10.6667 1.16669L16.5 7.00002M16.5 7.00002L10.6667 12.8334M16.5 7.00002L1.5 7.00002" stroke="#84878A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </span>
+                <div class="step is-flex is-align-items-center">
+                    <div id="circle_capture" class="circle mr-4 is-inline-flex is-justify-content-center is-align-items-center has-text-weight-bold has-background-grey-dark">2</div>
+                    <button class="step-text button is-light">Capture Intent</button>
+                </div>
+                <span class="arrow mx-4">
+                    <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path opacity="0.5" d="M10.6667 1.16669L16.5 7.00002M16.5 7.00002L10.6667 12.8334M16.5 7.00002L1.5 7.00002" stroke="#84878A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </span>
+                <div class="step is-flex is-align-items-center">
+                    <div id="circle_actions" class="circle mr-4 is-inline-flex is-justify-content-center is-align-items-center has-text-weight-bold has-background-grey-dark">3</div>
+                    <button class="step-text button is-light ">Recommended Actions</button>
+                </div>
+                <span class="arrow mx-4">
+                    <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path opacity="0.5" d="M10.6667 1.16669L16.5 7.00002M16.5 7.00002L10.6667 12.8334M16.5 7.00002L1.5 7.00002" stroke="#84878A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </span>
+                <div class="step is-flex is-align-items-center">
+                    <div id="circle_workflow" class="circle mr-4 is-inline-flex is-justify-content-center is-align-items-center has-text-weight-bold has-background-grey-dark">4</div>
+                    <button class="step-text button  is-light">Generate Workflow</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section has-background-white has-text-black" style="padding: 1rem; height: 75vh; position: relative;">
+        <div id="dashboardContent" class="content-section" style="display: none;">
+            <!-- Dashboard Manual Content -->
+            <h2>Dashboard Manual</h2>
+            <br>
+            <p>This section contains information about how to use the dashboard.</p>
+            <div class="buttons is-right">
+                <button class="button is-light" onclick="changeStep(this, 'upload')">Next</button>
+            </div>
+        </div>
+        <div id="uploadContent" class="content-section" style="display: none;">
+            <!-- Upload Data Content -->
+            <h2 >Upload Data</h2>
+            <br>
+            <p>This section allows you to upload data to the system. Only <b>CSV</b> files are allowed.</p>
+            <div class="upload-container">
+                <div class="file has-name">
+                    <label class="file-label">
+                        <input id="fileInput" class="file-input" type="file" name="resume" accept=".csv" />
+                        <span class="file-cta">
+                            <span class="file-icon">
+                                <!-- SVG Upload Icon -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-upload" viewBox="0 0 16 16">
+                                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+                                    <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z"/>
+                                  </svg>
+                            </span>
+                            <span class="file-label">Choose a file…</span>
+                        </span>
+                        <span id="fileName" class="file-name">No file chosen</span>
+                    </label>
+                </div>
+            </div>
+            <div class="buttons is-right">
+                <button class="button is-light" onclick="changeStep(this, 'dashboard')">Back</button>
+                <button id="nextButton" class="button is-light" onclick="changeStep(this, 'capture')" disabled>Next</button>
+            </div>
+        </div>
+        <div id="captureContent" class="content-section" style="display: none;">
+            <!-- Capture Intent Content -->
+            <h2>Capture Analytical Intent from Text</h2>
+            <br>
+            <p>This section allows you to predict the analytical intent based on your problem description. Please enter your input in <b>textual form</b>.</p>
+            <br>
+            <div id="captureForm">
+                <textarea id="problemDescription" placeholder="Insert Analytical Problem Description..." rows="4" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;"></textarea>
+                <button id="submitButton" class="button is-light has-text-black" onclick="submitCaptureIntent()">Submit</button>
+            </div>
+            <div id="responseContainer" style="margin-top: 1em;"></div>
+            <div class="buttons is-right">
+                <button class="button is-light" onclick="changeStep(this, 'upload')">Back</button>
+                <button id="nextButtonIntent" class="button is-light" onclick="changeStep(this, 'actions')">Next</button>
+            </div>
+        </div>
+        <div id="actionsContent" class="content-section" style="display: none;">
+            <!-- Recommended Actions Content -->
+            <h2>Recommended Actions</h2>
+            <br>
+            <p>This section provides <b>recommended actions</b> for <b>workflow generation</b> based on your data.</p>
+            <br>
+            <!-- Input fields for recommendations -->
+            <div id="recommendationForm">
+                <!-- First column -->
+                <div class="column">
+                    <div class="field" id="dataField">
+                        <label class="label">What is your dataset?</label>
+                        <div class="control">
+                            <select id="dataSelect">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field" id="intentField">
+                        <label class="label">What is your intent?</label>
+                        <div class="control">
+                            <select id="intentSelect">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field" id="metricField" style="display: none;">
+                        <label class="label">Metric to optimize?</label>
+                        <div class="control">
+                            <select id="metricSelect">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field" id="preprocessingField" style="display: none;">
+                        <label class="label">Is Preprocessing needed?</label>
+                        <div class="control">
+                            <select id="preprocessingSelect">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field" id="hyperparameterField" style="display: none;">
+                        <label class="label">Restrict Hyperparameter?</label>
+                        <div class="control">
+                            <select id="hyperparameterSelect">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!-- Second column -->
+                <div class="column">
+                    <div class="field">
+                        <label class="label">Anticipation Method</label>
+                        <div class="control">
+                            <select id="param3Select" disabled>
+                                <option value="">SPARQL</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field" id="timeField" style="display: none;">
+                        <label class="label">Time limit (in seconds)</label>
+                        <div class="control">
+                            <input type="number" id="timeLimit" min="0" step="1" placeholder="Enter time limit">
+                        </div>
+                    </div>
+                    <div class="field" id="param5Field" style="display: none;">
+                        <label class="label">Restrict Algorithm?</label>
+                        <div class="control">
+                            <select id="algorithmSelect">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field" id="param6Field" style="display: none;">
+                        <label class="label">Restrict Preprocessing Algorithm?</label>
+                        <div class="control">
+                            <select id="algorithmPrepSelect">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field" id="hyperValueField" style="display: none;">
+                        <label class="label">Hyperparameter value</label>
+                        <div class="control">
+                            <input type="number" id="hyperLimit" min="0" step="1" placeholder="Enter value">
+                        </div>
+                    </div>
+                </div>
+                <!-- Third column -->
+                <div class="column">
+                    <div class="field">
+                        <button id="fetchButton" class="button is-primary">
+                            <span class="icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-right" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708"/>
+                                    <path fill-rule="evenodd" d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708"/>
+                                </svg>
+                            </span>
+                            &nbsp;&nbsp;Proceed
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="buttons is-right">
+                <button class="button is-light" onclick="changeStep(this, 'capture')">Back</button>
+                <button id="nextStepButton" class="button is-light" onclick="handleAcceptAndContinue()" disabled>Accept & Continue</button>
+            </div>
+        </div>
+        <div id="workflowContent" class="content-section" style="display: none;">
+            <!-- Generate Workflow Content -->
+            <h2>Generate Workflow</h2>
+            <br>
+            <p>This section helps you generate a workflow based on your inputs.</p>
+            <br>
+            <div>
+                <label class="label">Select the AutoML tool</label>
+                    <div style="display: flex; align-items: center;">
+                        <div class="select" style="margin-right: 10px;">
+                            <select id="selectedTool">
+                                <option value="hyperopt">Hyperopt-sklearn</option>
+                                <option value="tpot">TPOT</option>
+                            </select>
+                        </div>&nbsp;
+                        <button class="button is-primary" onclick="getWorkflowClick()">Generate Workflow</button>
+                    </div>
+                    <p class="help">Currently available for Regression and Classsification tasks.</p>
+            </div>
+            <br>
+            <section>
+                <section>
+                  <div id="dataflowImageContainer" style='display: flex; justify-content: center;'>
+                </div>
+                </section>
+                <br>
+                <br>
+                <section style="display: flex; justify-content: left;">
+                    <!-- Container for Accuracy Metric -->
+                    <div id="accuracyContainer" style="display: flex; justify-content: left;"></div>
+
+                    <!-- Container for Dataflow Image -->
+                    <div id="dataflowImageContainer" style='display: flex; justify-content: center;'></div>
+
+                    <!-- Container for Visualisation Image -->
+                    <div id="visualisationImageContainer" style='display: flex; justify-content: center;'></div>
+              </section>
+            </section>
+            <div class="buttons is-right">
+                <button class="button is-light" onclick="changeStep(this, 'actions')">Back</button>
+                <button id="saveWorkflow" class="button is-primary is-light" disabled onclick="saveWorkflow()">Save Workflow</button>
+            </div>
+        </div>
+    </section>
+    <script>
+        // Define global variables
+        let selectedFileName = ''; // Global variable to store file name
+        let selectedFileName_file_path = '';
+        let = pipeline_results = {}
+    
+        document.addEventListener('DOMContentLoaded', function () {
+            // Handle URL parameters to set the initial step
+            const urlParams = new URLSearchParams(window.location.search);
+            const step = urlParams.get('step') || 'dashboard';
+            changeStep(null, step);
+    
+            // Set up file input event listener
+            const fileInput = document.querySelector("#fileInput");
+            const fileName = document.querySelector("#fileName");
+            const nextButton = document.querySelector("#nextButton");  // Get the Next button
+            const intent = document.querySelector("#intentSelect")
+
+    
+            fileInput.addEventListener('change', function() {
+                if (fileInput.files.length > 0) {
+                    const file = fileInput.files[0];
+                    fileName.textContent = file.name;
+                    selectedFileName = file.name; // Store the file name in the global variable
+                    
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('fileName', file.name);
+                    
+                    fetch('/dashboard?step=upload/fileName', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('File name sent successfully:', data);
+                        selectedFileName_file_path = data.local_file_path
+                        nextButton.disabled = false;
+                        nextButton.classList.remove('is-light');
+                        nextButton.classList.add('is-primary');
+
+                        // Add the selected file name to the dataSelect options
+                        const dataSelect = document.querySelector("#dataSelect");
+                        const option = new Option(file.name, file.name);
+                        dataSelect.add(option, undefined);
+                        dataSelect.value = file.name; 
+                        dataSelect.disabled=true;
+
+                    })
+                    .catch(error => {
+                        console.error('Error in sending file name:', error);
+                    });
+                } else {
+                    fileName.textContent = 'No file chosen';
+                    nextButton.disabled = true; 
+                    nextButton.classList.remove('is-primary');
+                    nextButton.classList.add('is-light');
+                }
+            });
+            // Set up fetch button event listener
+            const fetchButton = document.querySelector("#fetchButton");
+            let fetchClickCount = 0;
+    
+            fetchButton.addEventListener('click', function () {
+                fetchClickCount++;
+    
+                if (fetchClickCount === 1) {
+                    // if intent has value call other functions to get values
+
+                     // Call function to make POST request with fileName and intent
+                    makePostRequest(selectedFileName, document.querySelector("#intentSelect").value);
+
+                    document.querySelector("#metricField").style.display = 'block';
+                    document.querySelector("#preprocessingField").style.display = 'block';
+                    document.querySelector("#timeField").style.display = 'block';
+                    document.querySelector("#param5Field").style.display = 'block';
+                    document.querySelector("#param6Field").style.display = 'block';
+                    
+                }else if (fetchClickCount == 2) {
+
+                    document.querySelector("#algorithmSelect").disabled=true;
+                    document.querySelector("#metricSelect").disabled=true;
+                    document.querySelector("#preprocessingSelect").disabled=true;
+                    document.querySelector("#algorithmPrepSelect").disabled=true;
+                    document.querySelector("#algorithmSelect").disabled = true;
+                    document.querySelector("#timeLimit").disabled = true;
+
+                    document.querySelector("#hyperparameterField").style.display = 'block';
+                    document.querySelector("#hyperValueField").style.display = 'block';
+
+                } 
+                else if (fetchClickCount == 3) {
+                    document.querySelector("#hyperparameterSelect").disabled= true;
+                    document.querySelector("#hyperLimit").disabled= true;
+                    fetchButton.textContent = 'Revert Changes';
+                    fetchButton.classList.remove('is-primary');
+                    fetchButton.classList.add('is-dark');
+                    const nextStepButton = document.querySelector("#nextStepButton");
+                    nextStepButton.disabled = false;
+                    nextStepButton.classList.remove('is-light');
+                    nextStepButton.classList.add('is-primary');
+                }
+                else if (fetchClickCount > 3) {
+                    // Update fetchButton appearance
+                    fetchButton.innerHTML = `
+                        <span class="icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-right" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708"/>
+                                <path fill-rule="evenodd" d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708"/>
+                            </svg>
+                        </span>
+                        &nbsp;&nbsp;Proceed
+                    `;
+                    fetchButton.classList.remove('is-dark');
+                    fetchButton.classList.add('is-primary');
+
+                    // Hide and clear combo boxes
+                    const comboBoxes = [
+                        "#algorithmSelect",
+                        "#metricSelect",
+                        "#preprocessingSelect",
+                        "#algorithmSelect",
+                        "#algorithmPrepSelect",
+                        "#timeLimit",
+                        "#hyperparameterSelect",
+                        "#hyperLimit"
+                    ];
+                    
+                    comboBoxes.forEach(selector => {
+                        const comboBox = document.querySelector(selector);
+                        if (comboBox) {
+                            comboBox.innerHTML = ''; // Clear all options
+                        }
+                    });
+
+                    // Reset click count
+                    fetchClickCount = 0;
+
+                    // Update nextStepButton appearance and state
+                    const nextStepButton = document.querySelector("#nextStepButton");
+                    if (nextStepButton) {
+                        nextStepButton.disabled = true;
+                        nextStepButton.classList.remove('is-primary');
+                        nextStepButton.classList.add('is-light');
+                    }
+
+                    // Re-enable combo boxes (if you need to re-enable them later, otherwise this step is optional)
+                    comboBoxes.forEach(selector => {
+                        const comboBox = document.querySelector(selector);
+                        if (comboBox) {
+                            comboBox.disabled = false; // Re-enable the combo box
+                        }
+                    });
+                }
+
+            });
+            function makePostRequest(fileName, intent) {
+                fetch('/dashboard?step=actions/get_intent_metrics', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ fileName: fileName, intent: intent })
+                })
+                .then(response => response.json())
+                .then(data => {
+                // Check if the response contains the expected fields
+                if (data.algorithm && data.metric && data.preprocessing && data.preprocessing_algorithm) {
+                    // Retrieve the values of each field
+                    const algorithm = data.algorithm;
+                    const metric = data.metric;
+                    const preprocessing = data.preprocessing;
+                    const preprocessingStatus = preprocessing ? 'Yes' : 'No';
+                    const preprocessingAlgorithm = data.preprocessing_algorithm;
+
+                    // Get the select elements
+                    const algorithmSelect = document.querySelector("#algorithmSelect");
+                    const metricSelect = document.querySelector("#metricSelect");
+                    const preprocessingSelect = document.querySelector("#preprocessingSelect");
+                    const algorithmPrepSelect = document.querySelector("#algorithmPrepSelect");
+
+                    function addOptionToSelect(selectElement, value) {
+                        // Check if the select element exists
+                        if (!selectElement) {
+                            console.error('Select element is null or undefined');
+                            return;
+                        }
+                        
+                        // Check if the select element has any options
+                        if (selectElement.options.length === 0) {
+                            // If no options exist, directly add the new option
+                            const option = new Option(value, value);
+                            selectElement.add(option);
+                        } else {
+                            // Check if the option already exists
+                            const existingOptions = Array.from(selectElement.options).map(option => option.value);
+                            if (!existingOptions.includes(value)) {
+                                const option = new Option(value, value);
+                                selectElement.add(option);
+                            }
+                        }
+                    }
+
+
+                    // Function to set the selected value of a select element
+                    function setSelectedOption(selectElement, value) {
+                        selectElement.value = value;
+                    }
+                    // Add options to the select elements
+                    addOptionToSelect(algorithmSelect, algorithm);
+                    addOptionToSelect(metricSelect, metric);
+                    addOptionToSelect(algorithmPrepSelect, preprocessingAlgorithm);
+
+
+                    // Ensure "Yes" and "No" options exist in algorithmPrepSelect
+                    addOptionToSelect(preprocessingSelect, "Yes");
+                    addOptionToSelect(preprocessingSelect, "No");
+
+                    // Set the selected value based on preprocessingAlgorithm
+                    const selectedValue = preprocessingAlgorithm ? "Yes" : "No";
+                    setSelectedOption(preprocessingSelect, selectedValue);
+
+                    console.log('Algorithm:', algorithm);
+                    console.log('Metric:', metric);
+                    console.log('Preprocessing:', preprocessing);
+                    console.log('Preprocessing Algorithm:', preprocessingAlgorithm);
+                } else {
+                    // Handle missing fields
+                    console.error('Some fields are missing in the response:', data);
+                    alert('Error: Some fields are missing in the response.');
+                }
+            })
+                .catch(error => {
+                    console.error('Error in sending file name and intent:', error);
+                });
+            }
+        });
+    
+        function changeStep(button, step) {
+            const previousSteps = {
+                'upload': 'dashboard',
+                'capture': 'upload',
+                'actions': 'capture',
+                'workflow': 'actions'
+            };
+    
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.style.display = 'none';
+            });
+    
+            document.querySelectorAll('.circle').forEach(circle => {
+                circle.classList.remove('has-background-gradient-primary');
+                circle.classList.add('has-background-grey-dark');
+            });
+    
+            switch (step) {
+                case 'dashboard':
+                    document.getElementById('dashboardContent').style.display = 'block';
+                    document.getElementById('circle_dashboard').classList.remove('has-background-grey-dark');
+                    document.getElementById('circle_dashboard').classList.add('has-background-gradient-primary');
+                    history.pushState(null, '', '?step=dashboard');
+                    break;
+                case 'upload':
+                    document.getElementById('uploadContent').style.display = 'block';
+                    document.getElementById('circle_upload').classList.remove('has-background-grey-dark');
+                    document.getElementById('circle_upload').classList.add('has-background-gradient-primary');
+                    history.pushState(null, '', '?step=upload');
+                    break;
+                case 'capture':
+                    document.getElementById('captureContent').style.display = 'block';
+                    document.getElementById('circle_capture').classList.remove('has-background-grey-dark');
+                    document.getElementById('circle_capture').classList.add('has-background-gradient-primary');
+                    history.pushState(null, '', '?step=capture');
+                    break;
+                case 'actions':
+                    fetchValues(); // Fetch values when 'actions' step is selected
+                    document.getElementById('actionsContent').style.display = 'block';
+                    document.getElementById('circle_actions').classList.remove('has-background-grey-dark');
+                    document.getElementById('circle_actions').classList.add('has-background-gradient-primary');
+                    history.pushState(null, '', '?step=actions');
+                    break;
+                case 'workflow':
+                    document.getElementById('workflowContent').style.display = 'block';
+                    document.getElementById('circle_workflow').classList.remove('has-background-grey-dark');
+                    document.getElementById('circle_workflow').classList.add('has-background-gradient-primary');
+                    history.pushState(null, '', '?step=workflow');
+                    break;
+                default:
+                    break;
+            }
+        }
+    
+        function fetchValues() {
+            // Ensure selectedFileName is available
+            if (!selectedFileName) {
+                console.error('No file selected.');
+                return;
+            }
+    
+            // Define the POST request payload
+            fetch('/dashboard?step=actions/get_intent', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ fileName: selectedFileName })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Values fetched successfully:', data);
+    
+                // Function to add a single option to a select element if it doesn't already exist
+                function addOptionToSelect(selectElement, value) {
+                        // Check if the option already exists
+                        const existingOptions = Array.from(selectElement.options).map(option => option.value);
+                        if (!existingOptions.includes(value)) {
+                            const option = new Option(value, value);
+                            selectElement.add(option);
+                        }
+                    }          
+    
+                // Populate select elements with fetched data
+                const dataSelect = document.querySelector("#dataSelect");
+                addOptionToSelect(dataSelect, data.data);
+    
+                const intentSelect = document.querySelector("#intentSelect");
+                addOptionToSelect(intentSelect, data.intents);
+
+                //disable
+                dataSelect.disabled=true
+                intentSelect.disabled=true
+
+
+    
+            })
+            .catch(error => {
+                console.error('Error fetching values:', error);
+            });
+        }
+    
+        window.submitCaptureIntent = function() {
+            const problemDescription = document.querySelector("#problemDescription").value;
+            const intentSelect = document.querySelector("#intentSelect");
+    
+            if (problemDescription.trim() === "") {
+                alert("Please enter a problem description before submitting.");
+                return;
+            }
+    
+            fetch('/dashboard?step=capture/predictIntent', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    text: problemDescription, 
+                    fileName: selectedFileName // Use the global variable
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Capture Intent submitted successfully:', data);
+                const responseContainer = document.querySelector("#responseContainer");
+                // Check for an 'intent' field in the response
+                const intent = data.intent || '';
+                const nextButtonIntent = document.querySelector("#nextButtonIntent");  // Get the Next button
+                nextButtonIntent.disabled=true;
+                const formattedIntent = intent.charAt(0).toUpperCase() + intent.slice(1);
+                // Check if intent is "unknown" or empty
+                if (!intent || intent.toLowerCase() === 'unknown') {
+                responseContainer.innerHTML = '<p><b>Invalid input</b>. Please refine your problem description.</p>';
+                } else {
+                // Capitalize the first letter of the intent
+                responseContainer.innerHTML = `<p> Predicted Intent: <b>${formattedIntent}</b></p>`;
+                nextButtonIntent.disabled=false;
+                nextButtonIntent.classList.remove('is-light');
+                nextButtonIntent.classList.add('is-primary');
+
+                }
+                // Helper function to add or select an option in the select element
+                function addOrSelectOption(selectElement, value) {
+                    const existingOptions = Array.from(selectElement.options);
+                    const existingOption = existingOptions.find(option => option.value === value);
+                    
+                    if (existingOption) {
+                        // If option exists, select it
+                        selectElement.value = value;
+                    } else {
+                        // If option doesn't exist, add it and then select it
+                        const newOption = new Option(value, value);
+                        selectElement.add(newOption, undefined);
+                        selectElement.value = value;
+                    }
+                }
+                addOrSelectOption(intentSelect, formattedIntent);
+            })
+            .catch(error => {
+                console.error('Error in submitting capture intent:', error);
+                const responseContainer = document.querySelector("#responseContainer");
+                responseContainer.innerHTML = `<p>Error submitting intent: ${error.message}</p>`;
+            });
+        }
+        function handleAcceptAndContinue() {
+        // Collect the selected values from the form
+
+        const selectedValues = {
+            dataset: document.querySelector("#dataSelect").value,
+            intent: document.querySelector("#intentSelect").value,
+            metric: document.querySelector("#metricSelect").value,
+            preprocessing: document.querySelector("#preprocessingSelect").value,
+            hyperparameter: document.querySelector("#hyperparameterSelect").value,
+            timeLimit: document.querySelector("#timeLimit").value,
+            algorithm: document.querySelector("#algorithmSelect").value,
+            preprocessingAlgorithm: document.querySelector("#algorithmPrepSelect").value,
+            hyperparameterValue: document.querySelector("#hyperLimit").value,
+            local_file_path : selectedFileName_file_path
+        };
+
+        // Send the selected values as a JSON object in a POST request
+        fetch('/dashboard?step=actions/send_data', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(selectedValues)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Workflow acquired successfully:', data);
+            // Proceed to the next step or handle the response as needed
+            changeStep(null, 'workflow');
+        })
+        .catch(error => {
+            console.error('Error acquiring workflow:', error);
+        });
+    }
+    function saveWorkflow() {
+
+        // Send the selected values as a JSON object in a POST request
+        fetch('/dashboard?step=workflow/save', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(pipeline_results)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch(error => {
+            console.error('Error saving workflow:', error);
+        });
+    }
+    function getWorkflowClick() {
+    // Get selected tool
+    var selectedTool = document.getElementById("selectedTool").value;
+    const saveWorkflowButton = document.querySelector("#saveWorkflow");
+
+    console.log("Selected Tool:", selectedTool);
+
+    // Set URL based on selected tool
+    var url = '/dashboard?step=workflow/' + selectedTool;
+
+    // Send request to server
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json(); // Parse response as JSON
+    })
+    .then(data => {
+        // Log the data for debugging
+        console.log('Success:', data);
+        pipeline_results = data.results;
+        // Extract information from the response
+        var dataflowImagePath = data.graph; // Updated to match your response
+        var visualisationImagePath = data.image; // Updated to match your response
+        var metricValue = data.results.metric_value.toFixed(2);
+        var metricName = data.results.metricName;
+        saveWorkflowButton.disabled=false;
+
+        // Convert metric name
+        var metric = '';
+        if (metricName === 'accuracy') {
+            metric = 'Accuracy';
+        } else if (metricName === 'mae') {
+            metric = 'MAE';
+        } else if (metricName === 'f1') {
+            metric = 'F1 Score';
+        } else {
+            metric = metricName;
+        }
+        // Update the Accuracy Container
+        document.getElementById("accuracyContainer").innerHTML = `
+            <div style="display: flex; justify-content: left;">
+                <strong>${metric}:</strong>&nbsp; ${metricValue}
+            </div>`;
+
+        // Update the Dataflow Image Container
+        document.getElementById("dataflowImageContainer").innerHTML = `
+            <div style='display: flex; justify-content: center;'>
+                <img src="${dataflowImagePath}" alt='Dataflow Image' style='width: 80%; height: 1.5cm;'>
+            </div>`;
+        
+        // Check if the image path is correct
+        console.log("Dataflow Image Path:", dataflowImagePath);
+
+        // Update the Visualisation Image Container
+        document.getElementById("visualisationImageContainer").innerHTML = `
+            <div style='display: flex; justify-content: center;'>
+                <img src="${visualisationImagePath}" alt='Visualisation Image' style='width: 100%; height: 10cm;'>
+            </div>`;
+        
+        // Check if the image path is correct
+        console.log("Visualisation Image Path:", visualisationImagePath);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+
+    </script>    
+<style>
+    .steps-container {
+        display: flex;
+        justify-content: left;
+        align-items: center;
+    }
+    .step {
+        margin: 0 1rem;
+        display: flex;
+        align-items: center;
+    }
+    .circle {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: background-color 0.3s;
+    }
+    .has-background-gradient-primary {
+        background-color: #00d1b2 !important;
+    }
+    .has-background-grey-dark {
+        background-color: #6e6b6b !important;
+    }
+    .arrow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .step-text {
+        margin-left: 1rem;
+    }
+    .buttons {
+        position: absolute;
+        bottom: 1rem;
+        right: 1rem;
+    }
+    .upload-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 50rem); /* Adjust based on your layout */
+}
+#recommendationForm {
+            display:flex;
+            gap: 20px; /* Adjust this value to control the space between columns */
+            max-width: 1000px; /* Adjust max-width as needed */
+}
+.column:last-child {
+            padding-top: 100px;
+            align-items: center; /* Center content vertically */
+            justify-content: center; /* Center content horizontally */
+        }
+    
+select[disabled] {
+    background-color: #f0f0f0; /* Light gray background */
+    color: #a0a0a0; /* Gray text color */
+    border: 1px solid #d0d0d0; /* Light gray border */
+    cursor: not-allowed; /* Change cursor to indicate non-interactivity */
+}
+
+</style>
+{% else %}
+    <h1 class="title">
+        Authentication required
+    </h1>
+    <h2 class="subtitle">
+        Please log in to access this page.
+    </h2>
+    <div style="display: flex; justify-content: center; gap: 10px;">
+        <a class="button" href="{{ url_for('auth.login') }}">Log in</a>
+        <a class="button" href="{{ url_for('auth.signup') }}">Sign Up</a>
+    </div>
+{% endif %}
+{% endblock %}
