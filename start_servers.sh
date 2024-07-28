@@ -65,6 +65,7 @@ cleanup() {
 trap cleanup EXIT
 
 # Start each server with its specific entry point and requirements file
+start_server "main_app" 8000 "__init__.py" "requirements.txt"
 start_server "llm" 8001 "api_llm_interaction.py" "requirements.txt"
 start_server "read-write-graphdb" 8002 "api_graphdb_interaction.py" "requirements.txt"
 start_server "automl" 8003 "api_automl_interaction.py" "requirements.txt"

@@ -1,0 +1,11 @@
+{
+    "dataset": "data/preprocessed/iris.csv",
+    "intent": "regression",
+    "metric": "",
+    "preprocessing": false,
+    "hyperparameter": "",
+    "hyperparameterValue": "",
+    "algorithm": "",
+    "preprocessingAlgorithm": "",
+    "timeLimit": ""
+}
