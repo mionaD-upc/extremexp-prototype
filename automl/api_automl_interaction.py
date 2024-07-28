@@ -2,8 +2,7 @@ import os
 import matplotlib
 import threading
 from flask import Flask, request, jsonify, send_from_directory, url_for
-from utils import preprocess_data
-import generate_ml_pipeline
+from utils import preprocess_data, generate_ml_pipeline
 import json
 
 app = Flask(__name__)

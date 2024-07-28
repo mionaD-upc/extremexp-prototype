@@ -1,0 +1,46 @@
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix rep: <http://www.openrdf.org/config/repository#>.
+@prefix sr: <http://www.openrdf.org/config/repository/sail#>.
+@prefix sail: <http://www.openrdf.org/config/sail#>.
+@prefix graphdb: <http://www.ontotext.com/config/graphdb#>.
+
+[] a rep:Repository ;
+    rep:repositoryID "<REPOSITORY_ID>" ;
+    rdfs:label "" ;
+    rep:repositoryImpl [
+        rep:repositoryType "graphdb:SailRepository" ;
+        sr:sailImpl [
+            sail:sailType "graphdb:Sail" ;
+
+            graphdb:read-only "<READ_ONLY>" ;
+
+            # Inference and Validation
+            graphdb:ruleset "<RULESET>" ;
+            graphdb:disable-sameAs "<DISABLE_SAMEAS>" ;
+            graphdb:check-for-inconsistencies "<CHECK_INCONSISTENCIES>" ;
+
+            # Indexing
+            graphdb:entity-id-size "<ENTITY_ID_SIZE>" ;
+            graphdb:enable-context-index "<ENABLE_CONTEXT_INDEX>" ;
+            graphdb:enablePredicateList "<ENABLE_PREDICATE_LIST>" ;
+            graphdb:enable-fts-index "<ENABLE_FTS_INDEX>" ;
+            graphdb:fts-indexes (<FTS_INDEXES>) ;
+            graphdb:fts-string-literals-index "<FTS_STRING_LITERALS_INDEX>" ;
+            graphdb:fts-iris-index "<FTS_IRIS_INDEX>" ;
+
+            # Queries and Updates
+            graphdb:query-timeout "<QUERY_TIMEOUT>" ;
+            graphdb:throw-QueryEvaluationException-on-timeout "<THROW_QUERY_EVAL_EXCEPTION>" ;
+            graphdb:query-limit-results "<QUERY_LIMIT_RESULTS>" ;
+
+            # Settable in the file but otherwise hidden in the UI and in the RDF4J console
+            graphdb:base-URL "<BASE_URL>" ;
+            graphdb:defaultNS "<DEFAULT_NS>" ;
+            graphdb:imports "<IMPORTS>" ;
+            graphdb:repository-type "<REPOSITORY_TYPE>" ;
+            graphdb:storage-folder "<STORAGE_FOLDER>" ;
+            graphdb:entity-index-size "<ENTITY_INDEX_SIZE>" ;
+            graphdb:in-memory-literal-properties "<IN_MEMORY_LITERAL_PROPERTIES>" ;
+            graphdb:enable-literal-index "<ENABLE_LITERAL_INDEX>" ;
+        ]
+    ] .

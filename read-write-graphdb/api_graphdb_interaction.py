@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from query_graphdb import get_intent, get_metric, get_preprocessing, get_algorithm, get_preprocessing_algorithm, get_users, add_new_user, find_user_by_email, add_new_dataset, add_new_workflow
+from utils.query_graphdb import get_intent, get_metric, get_preprocessing, get_algorithm, get_preprocessing_algorithm, get_users, add_new_user, find_user_by_email, add_new_dataset, add_new_workflow
 app = Flask(__name__)
 
 # Dictionary route information
