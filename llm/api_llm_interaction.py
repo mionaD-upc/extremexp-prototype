@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-from llm_text_to_intent import get_prediction
+from utils.llm_text_to_intent import get_prediction
 
 app = Flask(__name__)
 
