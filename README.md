@@ -7,8 +7,8 @@
 ### Set up your virtual environment
  ```bash
   pip install virtualenv
-  python3.11 -m venv <env_name>
-  source <env_name>/bin/activate
+  python3.11 -m venv prototype
+  source prototype/bin/activate
 ```
 ### Install and Configure GraphDB
 - Refer to https://graphdb.ontotext.com/documentation/10.7/how-to-install-graphdb.html for installation instructions.
