@@ -12,7 +12,6 @@ start_server() {
 
     echo "Starting server in $server_dir on port $port with entry point $entry_point..."
 
-    # Navigate to the server directory
     if ! cd "$server_dir"; then
         echo "Failed to cd into $server_dir"
         exit 1
@@ -44,7 +43,6 @@ start_server() {
     # Add PID to array
     PIDS+=($pid)
 
-    # Print the PID for reference
     echo "Server started in $server_dir with PID $pid"
 
     # Return to the original directory
@@ -64,7 +62,6 @@ cleanup() {
 
 trap cleanup EXIT
 
-# Start each server with its specific entry point and requirements file
 start_server "main_app" 8000 "__init__.py" "requirements.txt"
 start_server "llm" 8001 "api_llm_interaction.py" "requirements.txt"
 start_server "read-write-graphdb" 8002 "api_graphdb_interaction.py" "requirements.txt"
