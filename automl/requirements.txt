@@ -8,4 +8,4 @@ nbformat
 scikit-learn
 svgwrite
 tpot
-git+https://github.com/hyperopt/hyperopt-sklearn.git#egg=hyperopt-sklearn
+git+https://github.com/hyperopt/hyperopt-sklearn

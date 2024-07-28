@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Array to keep track of PIDs
+declare -a PIDS
+
 # Function to start a server and check if it starts successfully
 start_server() {
     local server_dir=$1
@@ -37,6 +40,9 @@ start_server() {
 
     # Get the PID of the last background process (the Flask server)
     local pid=$!
+    
+    # Add PID to array
+    PIDS+=($pid)
 
     # Print the PID for reference
     echo "Server started in $server_dir with PID $pid"
@@ -44,6 +50,19 @@ start_server() {
     # Return to the original directory
     cd ..
 }
+
+# Set up a trap to kill all processes on script exit or failure
+cleanup() {
+    echo "Cleaning up..."
+    for pid in "${PIDS[@]}"; do
+        if ps -p $pid > /dev/null; then
+            echo "Killing process $pid"
+            kill $pid
+        fi
+    done
+}
+
+trap cleanup EXIT
 
 # Start each server with its specific entry point and requirements file
 start_server "llm" 8001 "api_llm_interaction.py" "requirements.txt"

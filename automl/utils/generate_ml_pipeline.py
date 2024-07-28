@@ -496,22 +496,22 @@ def tpot_pipeline_generator(restrictions):
 
     return img_filename, graph_filename + '.svg', metric_name, metric_value
 
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python generate_ml_pipeline.py <file_path of csv file>")
-        sys.exit(1)
+# if __name__ == "__main__":
+#     if len(sys.argv) != 2:
+#         print("Usage: python generate_ml_pipeline.py <file_path of csv file>")
+#         sys.exit(1)
 
-    file_path = sys.argv[1]
-    restictions = {
-    "dataset": "data/preprocessed/iris.csv",
-    "intent": "regression",
-    "metric": "F1",
-    "preprocessing": True,
-    "hyperparameter": "",
-    "hyperparameterValue": "",
-    "algorithm": "sklearn-SVC",
-    "preprocessingAlgorithm": "sklearn-MinMaxScaler",
-    "timeLimit": ""
-    }   
-    # tpot_pipeline_generator(restictions)
-    hyperopt_pipeline_generator(restictions)
+#     file_path = sys.argv[1]
+#     restictions = {
+#     "dataset": "data/preprocessed/iris.csv",
+#     "intent": "regression",
+#     "metric": "F1",
+#     "preprocessing": True,
+#     "hyperparameter": "",
+#     "hyperparameterValue": "",
+#     "algorithm": "sklearn-SVC",
+#     "preprocessingAlgorithm": "sklearn-MinMaxScaler",
+#     "timeLimit": ""
+#     }   
+#     # tpot_pipeline_generator(restictions)
+#     hyperopt_pipeline_generator(restictions)

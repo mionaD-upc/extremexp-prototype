@@ -462,6 +462,6 @@ data = {
     'metric_value': 0.90
 }
 
-generate_rdf_triples(data, 'RDFtriples.nt')
-sparql_query = generate_sparql_insert_query(data)
+# generate_rdf_triples(data, 'RDFtriples.nt')
+# sparql_query = generate_sparql_insert_query(data)
 # print(sparql_query)
