@@ -26,7 +26,7 @@ python read-write-graphdb/utils/create_graphdb_repository.py
 ```
 - Load data into created repository (local file path to GraphDB server directory is required):
 ```bash
-  python read-write-graphdb/utils/import_file_to_graphdb_repository.py <$user.home/graphdb-import/>
+python read-write-graphdb/utils/import_file_to_graphdb_repository.py <$user.home/graphdb-import/>
 ```
 
 ### Store your API keys
