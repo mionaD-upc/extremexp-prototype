@@ -1,1 +1,1 @@
-# extremexp_prototype
+# extremexp-prototype
