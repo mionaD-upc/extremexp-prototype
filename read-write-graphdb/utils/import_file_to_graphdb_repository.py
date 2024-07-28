@@ -1,3 +1,4 @@
+import argparse
 import shutil
 import os
 import requests
@@ -35,8 +36,20 @@ def import_server_files(source_file, destination_directory, base_url, repo_id):
 
 # Example usage:
 if __name__ == "__main__":
-    source_file = "/Users/miona.dimic/Desktop/Project_IntentDetect/prototype/pro/graphdb-import/KnowledgeBase.nt"
-    destination_directory = "/Users/miona.dimic/graphdb-import"
+
+    # Set up argument parsing
+    parser = argparse.ArgumentParser(description="Import server files to a specified directory.")
+    parser.add_argument("destination_directory", type=str, help="Local path to GraphDB server directory where files will be imported.")
+    args = parser.parse_args()
+
+    destination_directory = args.destination_directory
+    
+    if not os.path.exists(destination_directory):
+        os.makedirs(destination_directory)
+    
+    # Parse the arguments
+    args = parser.parse_args()
+    source_file = "./read-write-graphdb/graphdb-import/KnowledgeBase.nt"
     base_url = "http://localhost:8080"
     repo_id = "test-repo"
     

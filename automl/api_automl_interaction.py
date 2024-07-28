@@ -101,6 +101,7 @@ def tpot_route():
         with lock:
             img_filename, graph_filename, metric_name, metric_value = generate_ml_pipeline.tpot_pipeline_generator(config)
         
+        print(img_filename)
         # Construct file URLs
         img_url = url_for('download_file', filename=img_filename, _external=True)
         graph_url = url_for('download_file', filename=graph_filename, _external=True)
@@ -114,7 +115,7 @@ def tpot_route():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route('/results/<path:filename>', methods=['GET'])
+@app.route('/<path:filename>', methods=['GET'])
 def download_file(filename):
     directory = os.path.dirname(filename)
     return send_from_directory(directory, os.path.basename(filename))

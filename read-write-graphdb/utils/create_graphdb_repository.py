@@ -3,13 +3,11 @@ import requests
 # GraphDB REST API
 ## https://graphdb.ontotext.com/documentation/10.1/using-the-graphdb-rest-api.html
 
-# Function to read TTL template file
 def read_ttl_template(template_file):
     """Reads TTL template file and returns its content."""
     with open(template_file, 'r') as f:
         return f.read()
 
-# Function to replace placeholders in TTL content
 def replace_placeholders(ttl_content, values):
     """Replaces placeholders in TTL content with corresponding values."""
     for key, value in values.items():
@@ -17,7 +15,6 @@ def replace_placeholders(ttl_content, values):
         ttl_content = ttl_content.replace(placeholder, value)
     return ttl_content
 
-# Function to create repository in GraphDB
 def create_repository_from_template(template_file, values, base_url):
     """Creates a repository in GraphDB using provided TTL template and values."""
     # Read TTL template
@@ -72,4 +69,4 @@ if __name__ == "__main__":
     graphdb_base_url = 'http://localhost:8080'
 
     # Create repository in GraphDB
-    create_repository_from_template('repository_template.ttl', repository_values, graphdb_base_url)
+    create_repository_from_template('./read-write-graphdb/utils/repository_template.ttl', repository_values, graphdb_base_url)

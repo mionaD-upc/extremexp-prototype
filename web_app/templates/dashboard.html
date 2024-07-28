@@ -733,14 +733,20 @@
         return response.json(); // Parse response as JSON
     })
     .then(data => {
-        // Log the data for debugging
+        
         console.log('Success:', data);
-        pipeline_results = data.results;
-        // Extract information from the response
-        var dataflowImagePath = data.graph; // Updated to match your response
-        var visualisationImagePath = data.image; // Updated to match your response
-        var metricValue = data.results.metric_value.toFixed(2);
-        var metricName = data.results.metricName;
+        if (selectedTool == 'hyperopt'){
+            pipeline_results = data.results;
+            var metricValue = data.results.metric_value.toFixed(2);
+            var metricName = data.results.metricName;
+        }else{
+            var metricValue = data.metric_value.toFixed(2);
+            var metricName = data.metric_name;
+        }
+        
+        var dataflowImagePath = data.graph;
+        var visualisationImagePath = data.image; 
+
         saveWorkflowButton.disabled=false;
 
         // Convert metric name
@@ -766,7 +772,6 @@
                 <img src="${dataflowImagePath}" alt='Dataflow Image' style='width: 80%; height: 1.5cm;'>
             </div>`;
         
-        // Check if the image path is correct
         console.log("Dataflow Image Path:", dataflowImagePath);
 
         // Update the Visualisation Image Container
@@ -775,7 +780,6 @@
                 <img src="${visualisationImagePath}" alt='Visualisation Image' style='width: 100%; height: 10cm;'>
             </div>`;
         
-        // Check if the image path is correct
         console.log("Visualisation Image Path:", visualisationImagePath);
     })
     .catch((error) => {

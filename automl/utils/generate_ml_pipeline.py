@@ -1,6 +1,6 @@
 from sklearn.model_selection import train_test_split
 from hpsklearn import *
-from sklearn.metrics import accuracy_score, confusion_matrix, f1_score, mean_absolute_error
+from sklearn.metrics import accuracy_score, confusion_matrix, mean_absolute_error
 from hyperopt import tpe
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -13,8 +13,31 @@ import shutil
 from tpot import TPOTClassifier, TPOTRegressor
 import nbformat as nbf
 import json
+from sklearn.metrics import fbeta_score
+import numpy as np
+import pandas as pd
 
-
+## modified f1_score from sklearn.metrics
+def f1_score(
+    y_true,
+    y_pred,
+    *,
+    labels=None,
+    pos_label=1,
+    average="micro", ## change
+    sample_weight=None,
+    zero_division="warn",
+):
+    return fbeta_score(
+        y_true,
+        y_pred,
+        beta=1,
+        labels=labels,
+        pos_label=pos_label,
+        average=average,
+        sample_weight=sample_weight,
+        zero_division=zero_division,
+    )
 def save_results_to_json(filename, dataset_name, intent, algorithm, hyperparameter_constraints,
                          preprocessing_constraint, time, metric_name, metric_value, pipeline):
     
@@ -33,7 +56,6 @@ def save_results_to_json(filename, dataset_name, intent, algorithm, hyperparamet
         'metric_value': metric_value
     }
 
-    # Save JSON data
     with open(filename, 'w') as json_file:
         json.dump(json_data, json_file, indent=4)
 
@@ -284,7 +306,6 @@ def hyperopt_pipeline_generator(restrictions):
     y_pred = estim.predict(X_test)
     pipeline = estim.best_model()
 
-     # Create and save JSON data
     json_filename = f"results/hyperopt-results/pipelines/{dataset_name}-{datetime.now().strftime('%Y%m%d%H%M%S')}-result.json"
     results_json = save_results_to_json(
         filename=json_filename,
@@ -419,6 +440,8 @@ def tpot_pipeline_generator(restrictions):
 
     metric_value = tpot.score(X_test, y_test)
 
+    if not os.path.exists('results/tpot-results/pipelines'):
+        os.makedirs('results/tpot-results/pipelines')
     tpot.export(f"results/tpot-results/pipelines/tpot_{dataset_name}-{datetime.now().strftime('%Y%m%d%H%M%S')}-{intent}_pipeline.py")
     with open(f"results/tpot-results/pipelines/tpot_{dataset_name}-{datetime.now().strftime('%Y%m%d%H%M%S')}-{intent}_pipeline.py", 'r') as f:
         python_code = f.read()
@@ -426,9 +449,9 @@ def tpot_pipeline_generator(restrictions):
     nb = nbf.v4.new_notebook()
     nb['cells'] = [nbf.v4.new_code_cell(python_code)]
 
-    if not os.path.exists('./results/tpot-results/notebooks'):
-        os.makedirs('./results/tpot-results/notebooks')
-    notebook_path = f"./results/tpot-results/notebooks/tpot_{dataset_name}-{datetime.now().strftime('%Y%m%d%H%M%S')}-{intent}_pipeline.ipynb"
+    if not os.path.exists('results/tpot-results/notebooks'):
+        os.makedirs('results/tpot-results/notebooks')
+    notebook_path = f"results/tpot-results/notebooks/tpot_{dataset_name}-{datetime.now().strftime('%Y%m%d%H%M%S')}-{intent}_pipeline.ipynb"
     with open(notebook_path, 'w') as f:
         nbf.write(nb, f)
 

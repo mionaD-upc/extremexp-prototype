@@ -1,11 +1,11 @@
 {
     "dataset": "data/preprocessed/iris.csv",
-    "intent": "regression",
-    "metric": "",
-    "preprocessing": false,
+    "intent": "classification",
+    "metric": "F1",
+    "preprocessing": true,
     "hyperparameter": "",
     "hyperparameterValue": "",
-    "algorithm": "",
-    "preprocessingAlgorithm": "",
+    "algorithm": "sklearn-SVC",
+    "preprocessingAlgorithm": "sklearn-MinMaxScaler",
     "timeLimit": ""
 }
