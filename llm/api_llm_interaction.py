@@ -13,10 +13,11 @@ routes_info = {
                 "text": "string"
             },
             "response": {
-                "intent": "string"
+                "intent": "string",
+                "model" : "string"
             },
             "example_usage": {
-                "curl": 'curl -X POST http://localhost:8001/captureIntent/predict -H "Content-Type: application/json" -d \'{"text": "Your text to classify"}\''
+                "curl": 'curl -X POST http://localhost:8001/predictIntent -H "Content-Type: application/json" -d \'{"text": "Your text to classify"}\''
             }
         }
     } 
@@ -42,7 +43,7 @@ def predict():
         if not text:
             return jsonify({"error": "Text parameter is required."}), 400
 
-        # Get prediction using the fixed provider and model
+        # Get prediction using the fixed model
         prediction = get_prediction(text, f"{MODEL}")
         
         return jsonify({"intent": prediction, "model":f"{MODEL}"}), 200
