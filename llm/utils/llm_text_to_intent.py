@@ -4,6 +4,9 @@ from dotenv import load_dotenv
 import os
 
 def load_api_key(api_name):
+    """
+    Retrieves the API key for a given service from environment variables.
+    """
     try:
         load_dotenv()
         return os.getenv(f"{api_name}_KEY")
@@ -25,6 +28,9 @@ def call_api(api, content, model):
         raise Exception(f"Error calling API: {str(e)}")
 
 def extract_label(predicted_label, labels):
+    """
+    Extracts the first matching label based on the predicted label.
+    """
     try:
         for label in labels:
             if label in predicted_label:
@@ -34,6 +40,9 @@ def extract_label(predicted_label, labels):
         raise Exception(f"Error extracting label: {str(e)}")
 
 def get_prediction_llama_mistral(api_key, content, labels, model):
+    """
+    Retrieves and extracts a label from the prediction response of the LlamaAPI based on the given content and model.
+    """
     try:
         llama = LlamaAPI(api_key)
         response_data = call_api(llama, content, model)
@@ -49,6 +58,9 @@ def get_prediction_llama_mistral(api_key, content, labels, model):
         raise Exception(f"Error processing Llama/Mistral prediction: {str(e)}")
 
 def get_prediction_gpt(content, labels, model):
+    """
+    Retrieves and extracts a label from the GPT model's prediction based on the provided content and model.
+    """
     try:
         client = OpenAI()
         completion = client.chat.completions.create(
@@ -61,6 +73,9 @@ def get_prediction_gpt(content, labels, model):
         raise Exception(f"Error processing GPT prediction: {str(e)}")
 
 def get_prediction(text_data, selected_model):
+    """
+    Classifies the provided text using the specified model and returns the predicted label.
+    """
     try:
         labels = [
             'data profiling', 'classification', 'correlation', 
