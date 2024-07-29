@@ -41,7 +41,7 @@ def f1_score(
 def save_results_to_json(filename, dataset_name, intent, algorithm, hyperparameter_constraints,
                          preprocessing_constraint, time, metric_name, metric_value, pipeline):
     
-    os.makedirs('results/hyperopt-results/pipelines', exist_ok=True)  # Create the pipelines directory
+    os.makedirs('results/hyperopt-results/pipelines', exist_ok=True)
 
     json_data = {
         'dataset': dataset_name,
@@ -49,7 +49,7 @@ def save_results_to_json(filename, dataset_name, intent, algorithm, hyperparamet
         'algorithm_constraint': algorithm,
         'hyperparam_constraints': hyperparameter_constraints,
         'preprocessor_constraint': preprocessing_constraint,
-        'time': 100, # Default value if not specified
+        'time': 100, # Default value
         'max_time': time,  
         'pipeline': pipeline,
         'metricName': metric_name.capitalize(),
@@ -60,6 +60,9 @@ def save_results_to_json(filename, dataset_name, intent, algorithm, hyperparamet
         json.dump(json_data, json_file, indent=4)
 
     return json_data
+
+
+## hyperopt_preprocessing_class_mapping, hyperopt_algorithm_class_mapping and hyperopt_metric_class_mapping should be futher expanded based on the Knowlegde Base
 
 hyperopt_preprocessing_class_mapping = {
     'Binarizer': binarizer("my_pre"),
@@ -76,7 +79,6 @@ hyperopt_preprocessing_class_mapping = {
     'SplineTransformer': spline_transformer("my_pre"),
     'StandardScaler': standard_scaler("my_pre"),
 }
-
 
 hyperopt_algorithm_class_mapping={
     # classification:
@@ -180,29 +182,45 @@ hyperopt_metric_class_mapping = {
     'F1': f1_score
 }
 
+
 def hyperopt_map_preprocessing_algorithm(preprocessingAlg):
+    """
+    Maps a preprocessing algorithm name (after removing 'sklearn-' prefix) to its corresponding class from the hyperopt preprocessing mapping.
+    """
     preprocessingAlg = preprocessingAlg.removeprefix("sklearn-")
     if preprocessingAlg in hyperopt_preprocessing_class_mapping:
         return hyperopt_preprocessing_class_mapping[preprocessingAlg]
     return None
 
 def hyperopt_map_algorithm(algorithm):
+    """
+    Maps an algorithm name (after removing 'sklearn-' prefix) to its corresponding class from the hyperopt algorithm mapping.
+    """
     algorithm = algorithm.removeprefix("sklearn-")
     if algorithm in hyperopt_algorithm_class_mapping:
         return hyperopt_algorithm_class_mapping[algorithm]
     return None
 
 def hyperopt_map_loss_fn(metric):
+    """
+    Maps a metric name to its corresponding class from the hyperopt metric mapping.
+    """
     if metric in hyperopt_metric_class_mapping:
         return hyperopt_metric_class_mapping[metric]
     return None
 
 
 def save_plot_as_image(filename):
+    """
+    Saves the current plot to a file with the specified filename and then closes the plot.
+    """
     plt.savefig(filename)
     plt.close()
 
 def hyperopt_pipeline_generator(restrictions):
+    """
+    Generates and evaluates a Hyperopt ML pipeline based on given constraints, saves the results and visualizations, and returns file paths for the results.
+    """
     data_file_path = restrictions.get('dataset')
     intent = restrictions.get('intent')
     metric = restrictions.get('metric')
@@ -232,7 +250,6 @@ def hyperopt_pipeline_generator(restrictions):
             preprocessing_steps = any_preprocessing("my_pre")
     else:
         preprocessing_steps = []  # No preprocessing
-    
 
     #timeLimit
     if time and time!='':
@@ -247,7 +264,6 @@ def hyperopt_pipeline_generator(restrictions):
         if algorithm and algorithm!='':
             mapped_algorithm = hyperopt_map_algorithm(algorithm)
             # print(mapped_algorithm)
-
             if mapped_algorithm!=None:
                 alg = mapped_algorithm
             else:
@@ -302,6 +318,7 @@ def hyperopt_pipeline_generator(restrictions):
     else:
         print('Intent must be classification or regression')
         return
+    
     metric_value = estim.score(X_test, y_test)
     y_pred = estim.predict(X_test)
     pipeline = estim.best_model()
@@ -322,7 +339,6 @@ def hyperopt_pipeline_generator(restrictions):
             'learner': str(pipeline['learner']).split('(')[0] + "()"
         }
     )
-
 
     if intent == 'classification':
         visualisation = 'Confusion Matrix'
@@ -404,10 +420,12 @@ def hyperopt_pipeline_generator(restrictions):
 
     graph.save()
 
-
     return img_filename, graph_filename + '.svg', metric_name, metric_value, results_json
 
 def tpot_pipeline_generator(restrictions):
+    """
+    Generates and evaluates a TPOT pipeline based on the specified intent, saves the pipeline and results, and returns file paths for the results.
+    """
     data_file_path = restrictions.get('dataset')
     intent = restrictions.get('intent')
 
@@ -418,7 +436,9 @@ def tpot_pipeline_generator(restrictions):
     X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=0.75, test_size=0.25, random_state=34)
     dataset_name = os.path.basename(data_file_path).split('.')[0]
 
+
     if intent == 'classification':
+        # Default settings
         tpot = TPOTClassifier(verbosity=3,
                             scoring="balanced_accuracy",
                             random_state=23,
@@ -429,6 +449,7 @@ def tpot_pipeline_generator(restrictions):
         metric_name = "accuracy"
 
     if intent == 'regression':
+        # Default settings
         tpot = TPOTRegressor(verbosity=3,
                             scoring="neg_mean_absolute_error",
                             random_state=23,

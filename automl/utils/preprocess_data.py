@@ -7,6 +7,9 @@ import json
 
 
 def preprocess_dataset(data_file_path):
+    """
+    Loads, preprocesses the dataset by encoding categorical variables and scaling features, then saves the processed data to a new CSV file.
+    """
     file_name = os.path.basename(data_file_path)     
     df = pd.read_csv(data_file_path)
     df.rename(columns={df.columns[-1]: 'target'}, inplace=True)
@@ -35,6 +38,9 @@ def preprocess_dataset(data_file_path):
 
 
 def preprocess_json(json_file_path):
+    """
+    Loads and modifies a JSON configuration file by updating dataset paths and intent values(lower case), then saves the updated configuration to a new JSON file.
+    """
     file_name = "working_request.json"
 
     with open(json_file_path, 'r') as file:
