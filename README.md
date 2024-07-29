@@ -48,6 +48,9 @@ The **start_servers.sh** script will automatically install the necessary require
 - read-write-graphdb
 - automl
 
+For detailed information about the API routes and functionality for each server, please refer to the specific *Markdown documentation* files located in their respective folders.
+
+
 ### Navigate to the Main Application (web_app)
    In order to engage with application you should navigate your web browser to
 `http://localhost:8000` or you can use `curl`.
