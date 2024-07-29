@@ -18,12 +18,24 @@ lock = threading.Lock()
 matplotlib.use('Agg')  # Use 'Agg' for non-interactive backend
 
 def read_working_request():
+    """
+    Reads and returns the configuration data from the 'working_request.json' file located in the preprocessed data directory.
+    """
     working_request = './data/preprocessed/working_request.json'
     if not os.path.exists(working_request):
         raise FileNotFoundError(f"{working_request} does not exist.")
     with open(working_request, 'r') as f:
         config = json.load(f)
     return config
+
+@app.route('/', methods=['GET'])
+def base_route():
+    return jsonify({
+            "/send_and_preprocess": "POST - Upload a file and preprocess the data.",
+            "/hyperopt": "GET - Run the Hyperopt pipeline and get results.",
+            "/tpot": "GET - Run the TPOT pipeline and get results.",
+            "/<path:filename>": "GET - Download a file from the server."
+    })
 
 @app.route('/send_and_preprocess', methods=['POST'])
 def preprocess():
