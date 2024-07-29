@@ -164,7 +164,7 @@ Download a file from the server.
 #### Example Usage
 
 ```
-http://localhost:8003/your_file_name.csv
+http://localhost:8003/your_file_name.json
 ```
 
 #### Errors
