@@ -9,6 +9,9 @@ import math
 import os
 from utils import save_workflow
 
+# GraphDB REST API
+## https://graphdb.ontotext.com/documentation/10.1/using-the-graphdb-rest-api.html
+
 base_url = "http://localhost:8080"
 repository = "test-repo"
 last_inserted_user= None
@@ -272,6 +275,17 @@ def get_metric(user, dataset, intent):
 
 
 def get_preprocessing(user, dataset, intent):
+    """
+    Determines if preprocessing is required based on user-specific or general task constraints for a given dataset and intent.
+
+    Args:
+    - user (str): The user identifier.
+    - dataset (str): The dataset identifier.
+    - intent (str): The intent identifier.
+
+    Returns:
+    - bool: True if preprocessing is required, False otherwise.
+    """
     found = False
     preprocessing = True
 
@@ -449,6 +463,19 @@ def get_preprocessing(user, dataset, intent):
 
 
 def get_algorithm(user, dataset, intent):
+
+    """
+    Retrieves the most frequently used algorithm for a given user, dataset, and intent.
+
+    Args:
+    - user (str): The user identifier.
+    - dataset (str): The dataset identifier.
+    - intent (str): The intent identifier.
+
+    Returns:
+    - str: The most frequently used algorithm for the specified criteria, or None if no algorithm is found.
+    """
+
     found = False
     algorithm = None
     
@@ -675,6 +702,13 @@ def get_preprocessing_algorithm(user, dataset, intent):
 
 
 def get_users_with_workflows():
+
+    """
+    Retrieves a list of distinct users who have associated workflows.
+
+    Returns:
+    - list of str: User identifiers (names) who have at least one workflow.
+    """
     
     query = """
     PREFIX ml: <http://localhost/8080/intentOntology#>
@@ -694,6 +728,12 @@ def get_users_with_workflows():
 
 
 def get_users():
+    """
+    Retrieves a list of distinct users from the repository.
+
+    Returns:
+    - list of str: User identifiers (names) for all users of type `ml:User`.
+    """
     global last_inserted_user  # Declare the use of the global variable
     
     query = """
@@ -728,70 +768,16 @@ def get_users():
         "last_inserted_user": last_inserted_user
     }
 
-
-def create_insert_user_query_template(repository_id):
-
-    # TO BE USED FOR DATA UPDATE CASES
-
-    url = f"http://localhost:8080/rest/repositories/{repository_id}/sparql-templates"
-    
-    template_id = "http://localhost/8080/intentOntology#insert_user_template"
-    
-    query = """
-    PREFIX ml: <http://localhost/8080/intentOntology#>
-    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-
-    INSERT DATA {
-      ml:User0 rdf:type ml:User ;
-                ml:name "username0" ;
-                ml:email "user0@example.com" ;
-                ml:password "pass0" .
-    }
-    """
-    
-    data = {
-        "templateID": template_id,
-        "query": query
-    }
-    
-    headers = {
-        'accept': '*/*',
-        'Content-Type': 'application/json'
-    }
-
-    response = requests.post(url, headers=headers, data=json.dumps(data))
-    
-    if response.status_code != 201:
-        raise Exception(f"Error: Received status code {response.status_code}. Response: {response.text}")
-    
-    print(f"Created template: {template_id}")
-
-    return
-
-
-def get_query_template_configuration(template_id, repository_id):
-    
-    # TO BE USED FOR DATA UPDATE CASES
-
-    url = f"http://localhost:8080/rest/repositories/{repository_id}/sparql-templates/configuration"
-    
-    params = {
-        "templateID": template_id
-    }
-
-    headers = {
-        'accept': 'text/plain'
-    }
-
-    response = requests.get(url, headers=headers, params=params)
-    
-    if response.status_code != 200:
-        raise Exception(f"Error: Received status code {response.status_code}. Response: {response.text}")
-
-    return response.text
-
-
 def add_new_user(email):
+    """
+    Adds a new user with a unique ID and specified email to the GraphDB repository and updates the last inserted user record.
+
+    Args:
+    - email (str): The email address of the new user.
+
+    Returns:
+    - str: The ID of the newly added user if successful, or None if there was an error.
+    """
     result = get_users()  # Call the updated get_users function
     last_inserted_user = result["last_inserted_user"]   
     repository_id = repository
@@ -829,7 +815,15 @@ def add_new_user(email):
 
 
 def find_user_by_email(email):
-    # Create a SPARQL query
+    """
+    Retrieves the user ID associated with the specified email address.
+
+    Args:
+    - email (str): The email address of the user to find.
+
+    Returns:
+    - str: The user ID if a user with the specified email is found, or None if no such user exists.
+    """
     query = f"""
     PREFIX ml: <http://localhost/8080/intentOntology#>
     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -848,6 +842,15 @@ def find_user_by_email(email):
 
 
 def add_new_dataset(dataset_name):
+    """
+    Adds a new dataset with the specified name to the repository.
+
+    Args:
+    - dataset_name (str): The name of the dataset to be added.
+
+    Returns:
+    - str: The name of the added dataset if successful, or None if there was an error.
+    """
     repository_id = repository
     url = f"http://localhost:8080/repositories/{repository_id}/statements"
 
@@ -868,7 +871,6 @@ def add_new_dataset(dataset_name):
 
     response = requests.post(url, headers=headers, data=query)
 
-    # Check the response status code
     if response.status_code == 204:
         print(f"Added new dataset: {dataset_name}")
         return dataset_name
@@ -878,6 +880,15 @@ def add_new_dataset(dataset_name):
 
 
 def add_new_workflow(data):
+    """
+    Adds a new workflow to the GraphDB repository using the provided data and returns the workflow's name.
+
+    Args:
+    - data (dict): The data required to create and add the new workflow.
+
+    Returns:
+    - str: The name of the added workflow if successful, or None if there was an error.
+    """
     repository_id = repository
     url = f"http://localhost:8080/repositories/{repository_id}/statements"
 
@@ -889,7 +900,6 @@ def add_new_workflow(data):
 
     response = requests.post(url, headers=headers, data=insert_query)
 
-    # Check the response status code
     if response.status_code == 204:
         print(f"Added new workflow: {workflow_uri} for the user {user_uri}")
         return workflow_name
@@ -910,7 +920,6 @@ def add_new_workflow(data):
     # users = get_users()
     # print("Available users in the system:")
     # print(users)
-    # create_insert_user_query_template(repository)
 #     user = find_user_by_email("userX@example.com")
 #     print(user)
 #     dataset_name = "datasetX"

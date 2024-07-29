@@ -78,7 +78,16 @@ routes_info = {
             "message": "string"
         },
         "example_usage": "curl -X POST http://localhost:8002/add_dataset -H \"Content-Type: application/json\" -d '{\"dataset\": \"new_dataset_name\"}'"
-    }
+    },
+    "/add_workflow": {
+    "parameters": ["data"],
+    "description": "Adds a new workflow to the GraphDB repository using the provided data.",
+    "response": {
+        "workflow_name": "string"
+    },
+    "example_usage": "curl -X POST http://localhost:8002/add_workflow -H \"Content-Type: application/json\" -d '{\"data\": {\"user\": \"example_user\", \"dataset\": \"dataset_name\", \"intent\": \"intent_class\", \"algorithm_constraint\": \"ExampleAlgorithm\", \"hyperparam_constraints\": {\"param1\": \"value1\", \"param2\": \"value2\"}, \"time\":  \"time_value\", \"preprocessor_constraint\": \"ExamplePreprocessor\", \"max_time\": \"max_time_value\", \"pipeline\": {\"preprocs\": [\"ExamplePreprocessor()\"], \"learner\": \"ExampleLearner()\"}, \"metricName\": \"example_metric\", \"metric_value\": \"example metric_value\"}}'"
+}
+
 }
 
 @app.route('/', methods=['GET'])

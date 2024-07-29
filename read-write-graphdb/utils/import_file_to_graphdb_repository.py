@@ -8,6 +8,9 @@ import json
 ## https://graphdb.ontotext.com/documentation/10.1/using-the-graphdb-rest-api.html
 
 def import_server_files(source_file, destination_directory, base_url, repo_id):
+    """
+    Copies a file to a specified server directory and imports it to a GraphDB repository via a POST request.
+    """
     os.makedirs(destination_directory, exist_ok=True)
     
     filename = os.path.basename(source_file)
@@ -16,8 +19,7 @@ def import_server_files(source_file, destination_directory, base_url, repo_id):
     
     print(f"File '{filename}' copied to server directory '{destination_directory}'.")
     
-    # Prepare the data for POST request
-    data_url = filename  # Assuming filename is sufficient if server can directly access it
+    data_url = filename 
     payload = {
         "fileNames": [data_url]
     }
@@ -25,7 +27,6 @@ def import_server_files(source_file, destination_directory, base_url, repo_id):
         "Content-Type": "application/json"
     }
     
-    # Make POST request to import files to repository
     url = f"{base_url}/rest/repositories/{repo_id}/import/server"
     response = requests.post(url, headers=headers, data=json.dumps(payload))
     
@@ -51,6 +52,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
     source_file = "./read-write-graphdb/graphdb-import/KnowledgeBase.nt"
     base_url = "http://localhost:8080"
-    repo_id = "test-repo"
+    repo_id = "test-repo" # specify your repository name
     
     import_server_files(source_file, destination_directory, base_url, repo_id)

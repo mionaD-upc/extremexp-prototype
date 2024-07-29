@@ -133,7 +133,6 @@ def generate_rdf_triples(data, file_path):
                 g.add((const,ns.on,URIRef(uri+'sklearn-'+algorithm_constraint+'-'+hycon)))
 
 
-
         preprocessor_constraint = data.get('preprocessor_constraint', None)
         not_use_pre = URIRef(uri+'ConstraintNoPreprocessing')
 
@@ -440,27 +439,27 @@ def generate_sparql_insert_query(data):
     return insert_query, workflow_uri, user_uri, workflow_name
 
 # Example usage
-data = {
-    'user': 'john_doe',
-    'dataset': 'iris',
-    'intent': 'Classification',
-    'algorithm_constraint': 'SVC',
-    'hyperparam_constraints': {
+# data = {
+#     'user': 'john_doe',
+#     'dataset': 'iris',
+#     'intent': 'Classification',
+#     'algorithm_constraint': 'SVC',
+#     'hyperparam_constraints': {
         
-    },
-    'time': 100,
-    'preprocessor_constraint': 'StandardScaler',
-    'time': 100,
-    'max_time': 300,
-    'pipeline': {
-        'preprocs': [
-            'StandardScaler()',
-        ],
-        'learner': 'SVC(C=1.0)'
-    },
-    'metricName': 'Accuracy',
-    'metric_value': 0.90
-}
+#     },
+#     'time': 100,
+#     'preprocessor_constraint': 'StandardScaler',
+#     'time': 100,
+#     'max_time': 300,
+#     'pipeline': {
+#         'preprocs': [
+#             'StandardScaler()',
+#         ],
+#         'learner': 'SVC(C=1.0)'
+#     },
+#     'metricName': 'Accuracy',
+#     'metric_value': 0.90
+# }
 
 # generate_rdf_triples(data, 'RDFtriples.nt')
 # sparql_query = generate_sparql_insert_query(data)
