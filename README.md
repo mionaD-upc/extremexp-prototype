@@ -36,7 +36,13 @@ Make sure you have ```.env``` file in the **llm folder** with your API keys stor
   LlamaAPI_KEY=<LlamaAPI_KEY>
   ```
 For more information on how to obtain API Keys, refer to : [OpenAI](https://platform.openai.com/docs/quickstart) and [LLama AI](https://docs.llama-api.com/api-token).
-  
+
+
+### Install OpenMP Library
+  ```
+brew install libomp
+  ```
+
 ### Start servers
 ```bash
    chmod +x start_servers.sh
