@@ -516,8 +516,6 @@ Adds a new workflow to the GraphDB repository using the provided data.
     "intent": "string",
     "algorithm_constraint": "string",
     "hyperparam_constraints": {
-      "param1": "value1",
-      "param2": "value2"
     },
     "time": "string",
     "preprocessor_constraint": "string",
@@ -544,7 +542,7 @@ Adds a new workflow to the GraphDB repository using the provided data.
 #### Example Usage
 
 ```
-curl -X POST http://localhost:8002/add_workflow -H "Content-Type: application/json" -d '{"data": {"user": "example_user", "dataset": "dataset_name", "intent": "intent_class", "algorithm_constraint": "ExampleAlgorithm", "hyperparam_constraints": {"param1": "value1", "param2": "value2"}, "time": "time_value", "preprocessor_constraint": "ExamplePreprocessor", "max_time": "max_time_value", "pipeline": {"preprocs": ["ExamplePreprocessor()"], "learner": "ExampleLearner()"}, "metricName": "example_metric", "metric_value": "example metric_value"}}'
+curl -X POST http://localhost:8002/add_workflow -H "Content-Type: application/json" -d '{"data": {"user": "john_doe", "dataset": "iris", "intent": "Classification", "algorithm_constraint": "SVC", "hyperparam_constraints": {}, "time": 100, "max_time": 300, "preprocessor_constraint": "StandardScaler", "pipeline": {"preprocs": ["StandardScaler()"], "learner": "SVC(C=1.0)"}, "metricName": "Accuracy", "metric_value": 0.90}}'
 ```
 
 #### Errors
