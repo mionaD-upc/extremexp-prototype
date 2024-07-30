@@ -1,15 +1,15 @@
 # extremexp-prototype
 ## System Architecture
 
-The prototype is designed as a multi-server communication system, where users interact with the main application, which is hosted and executed by the web_app server.
+The prototype is designed as a multi-server communication system, where users interact with the main application, which is hosted and executed by the **web_app server**.
 
-Currently, SQLite functions as the database linked to the web_app server, handling user login information, datasets uploaded by users, and intent predictions received from the LLM server.
+Currently, **SQLite** functions as the database linked to the web_app server, handling user login information, datasets uploaded by users, and intent predictions received from the LLM server.
 
-The LLM server is accessed by the main app, which sends user-inputted text for processing. This text is classified by a specific LLM into an analytical intent, which is then presented to the user within the main app.
+The **llm server** is accessed by the main app, which sends user-inputted text for processing. This text is classified by a specific LLM into an analytical intent, which is then presented to the user within the main app.
 
-The read-write-graphdb server manages storage and retrieval of information from the GraphDB, which maintains the knowledge base.
+The **read-write-graphdb server** manages storage and retrieval of information from the **GraphDB**, which maintains the knowledge base.
 
-Finally, the AutoML server processes requests from the main app, including the working dataset, intent predictions, and ML pipeline constraints. Based on this information, it generates ML pipelines using tools like TPOT or Hyperopt and returns the results to the main app.
+Finally, the **automl server** processes requests from the main app, including the working dataset, intent predictions, and ML pipeline constraints. Based on this information, it generates ML pipelines using tools like TPOT or Hyperopt and returns the results to the main app.
 
 ![System Components](img/system-components.png)
 
