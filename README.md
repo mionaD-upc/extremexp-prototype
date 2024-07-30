@@ -45,8 +45,8 @@ brew install libomp
 
 ### Start servers
 ```bash
-   chmod +x start_servers.sh
-    ./start_servers.sh
+chmod +x start_servers.sh
+./start_servers.sh
 ```
 The **start_servers.sh** script will automatically install the necessary requirements and start the following servers:
 - web_app
