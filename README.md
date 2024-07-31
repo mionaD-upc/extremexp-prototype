@@ -137,6 +137,7 @@ def call_server():
     except requests.RequestException as e:
         return jsonify({'error': str(e)}), 500
 ```
+You can test this route my starting main app and the new server and accessing the url http://localhost:8000/call-server in your browser.
 
 ### Adding New Functionalities to the Existing Servers
 
