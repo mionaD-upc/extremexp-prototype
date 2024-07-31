@@ -11,7 +11,7 @@ The **read-write-graphdb server** manages storage and retrieval of information f
 
 Finally, the **automl server** processes requests from the main app, including the working dataset, intent predictions, and ML pipeline constraints. Based on this information, it generates ML pipelines using tools like TPOT or Hyperopt and returns the results to the main app.
 
-![System Components](img/system-components.png)
+![System Components](static/system-components.png)
 
 ## Project Setup
 
