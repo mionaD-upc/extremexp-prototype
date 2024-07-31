@@ -52,7 +52,7 @@ def save_results_to_json(filename, dataset_name, intent, algorithm, hyperparamet
         'time': 100, # Default value
         'max_time': time,  
         'pipeline': pipeline,
-        'metricName': metric_name.capitalize(),
+        'metricName': metric_name,
         'metric_value': metric_value
     }
 

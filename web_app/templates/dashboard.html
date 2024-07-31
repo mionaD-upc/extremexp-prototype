@@ -57,16 +57,18 @@
     <section class="section has-background-white has-text-black" style="padding: 1rem; height: 75vh; position: relative;">
         <div id="dashboardContent" class="content-section" style="display: none;">
             <!-- Dashboard Manual Content -->
-            <h2>Dashboard Manual</h2>
+            <b>Dashboard Manual</b>
+            <br>
             <br>
             <p>This section contains information about how to use the dashboard.</p>
             <div class="buttons is-right">
-                <button class="button is-light" onclick="changeStep(this, 'upload')">Next</button>
+                <button class="button is-primary" onclick="changeStep(this, 'upload')">Next</button>
             </div>
         </div>
         <div id="uploadContent" class="content-section" style="display: none;">
             <!-- Upload Data Content -->
-            <h2 >Upload Data</h2>
+            <b>Upload Data</b>
+            <br>
             <br>
             <p>This section allows you to upload data to the system. Only <b>CSV</b> files are allowed.</p>
             <div class="upload-container">
@@ -94,13 +96,14 @@
         </div>
         <div id="captureContent" class="content-section" style="display: none;">
             <!-- Capture Intent Content -->
-            <h2>Capture Analytical Intent from Text</h2>
+            <b>Capture Analytical Intent from Text</b>
+            <br>
             <br>
             <p>This section allows you to predict the analytical intent based on your problem description. Please enter your input in <b>textual form</b>.</p>
             <br>
             <div id="captureForm">
                 <textarea id="problemDescription" placeholder="Insert Analytical Problem Description..." rows="4" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;"></textarea>
-                <button id="submitButton" class="button is-light has-text-black" onclick="submitCaptureIntent()">Submit</button>
+                <button id="submitButton" class="button is-light" onclick="submitCaptureIntent()">Submit</button>
             </div>
             <div id="responseContainer" style="margin-top: 1em;"></div>
             <div class="buttons is-right">
@@ -110,9 +113,10 @@
         </div>
         <div id="actionsContent" class="content-section" style="display: none;">
             <!-- Recommended Actions Content -->
-            <h2>Recommended Actions</h2>
+            <b>Recommended Actions</b>
             <br>
-            <p>This section provides <b>recommended actions</b> for <b>workflow generation</b> based on your data.</p>
+            <br>
+            <p>This section provides recommended actions for <b>workflow generation</b> based on your data.</p>
             <br>
             <!-- Input fields for recommendations -->
             <div id="recommendationForm">
@@ -213,7 +217,8 @@
         </div>
         <div id="workflowContent" class="content-section" style="display: none;">
             <!-- Generate Workflow Content -->
-            <h2>Generate Workflow</h2>
+            <b>Generate Workflow</b>
+            <br>
             <br>
             <p>This section helps you generate a workflow based on your inputs.</p>
             <br>
@@ -226,7 +231,7 @@
                                 <option value="tpot">TPOT</option>
                             </select>
                         </div>&nbsp;
-                        <button class="button is-primary" onclick="getWorkflowClick()">Generate Workflow</button>
+                        <button id="generateWorkflow" class="button is-primary" onclick="getWorkflowClick()">Generate Workflow</button>
                     </div>
                     <p class="help">Currently available for Regression and Classsification tasks.</p>
             </div>
@@ -256,12 +261,79 @@
         </div>
     </section>
     <script>
+        let fetchClickCount = 0;
+
+        // Function to handle the reset action
+        function resetForm() {
+                const fetchButton = document.querySelector("#fetchButton");
+                const comboBoxes = [
+                    "#algorithmSelect",
+                    "#metricSelect",
+                    "#preprocessingSelect",
+                    "#algorithmPrepSelect",
+                    "#timeLimit",
+                    "#hyperparameterSelect",
+                    "#hyperLimit"
+                ];
+                
+                // Update fetchButton appearance
+                fetchButton.innerHTML = `
+                    <span class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-right" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708"/>
+                            <path fill-rule="evenodd" d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708"/>
+                        </svg>
+                    </span>
+                    &nbsp;&nbsp;Proceed
+                `;
+                fetchButton.classList.remove('is-dark');
+                fetchButton.classList.add('is-primary');
+
+                // Hide and clear combo boxes
+                comboBoxes.forEach(selector => {
+                    const comboBox = document.querySelector(selector);
+                    if (comboBox) {
+                        comboBox.innerHTML = ''; // Clear all options
+                        comboBox.disabled = false; // Re-enable the combo box
+                    }
+                });
+
+                // Reset click count
+                fetchClickCount = 0;
+
+                // Update nextStepButton appearance and state
+                const nextStepButton = document.querySelector("#nextStepButton");
+                if (nextStepButton) {
+                    nextStepButton.disabled = true;
+                    nextStepButton.classList.remove('is-primary');
+                    nextStepButton.classList.add('is-light');
+                }
+            }
         // Define global variables
         let selectedFileName = ''; // Global variable to store file name
         let selectedFileName_file_path = '';
         let = pipeline_results = {}
     
         document.addEventListener('DOMContentLoaded', function () {
+
+            const textarea = document.getElementById('problemDescription');
+            const submitButton = document.getElementById('submitButton');
+            const responseContainer = document.querySelector("#responseContainer");
+
+
+            textarea.addEventListener('input', function() {
+                if (textarea.value.trim() !== '') {
+                    submitButton.classList.remove('is-light');
+                    submitButton.classList.add('is-primary');
+                    responseContainer.innerHTML=''
+                    submitButton.classList.remove('is-loading')
+
+                } else {
+                    submitButton.classList.remove('is-primary');
+                    submitButton.classList.add('is-light');
+                }
+            });
+
             // Handle URL parameters to set the initial step
             const urlParams = new URLSearchParams(window.location.search);
             const step = urlParams.get('step') || 'dashboard';
@@ -275,11 +347,14 @@
 
     
             fileInput.addEventListener('change', function() {
+                const responseContainer = document.querySelector("#responseContainer");
+
                 if (fileInput.files.length > 0) {
                     const file = fileInput.files[0];
                     fileName.textContent = file.name;
                     selectedFileName = file.name; // Store the file name in the global variable
-                    
+                    resetForm()
+                    responseContainer.innerHTML=''
                     const formData = new FormData();
                     formData.append('file', file);
                     formData.append('fileName', file.name);
@@ -314,13 +389,13 @@
                     nextButton.classList.add('is-light');
                 }
             });
-            // Set up fetch button event listener
-            const fetchButton = document.querySelector("#fetchButton");
-            let fetchClickCount = 0;
-    
+            
             fetchButton.addEventListener('click', function () {
+                const fetchButton = document.querySelector("#fetchButton");
+                const intentSelect = document.querySelector("#intentSelect").value;
                 fetchClickCount++;
-    
+
+                
                 if (fetchClickCount === 1) {
                     // if intent has value call other functions to get values
 
@@ -358,60 +433,15 @@
                     nextStepButton.classList.add('is-primary');
                 }
                 else if (fetchClickCount > 3) {
-                    // Update fetchButton appearance
-                    fetchButton.innerHTML = `
-                        <span class="icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-right" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708"/>
-                                <path fill-rule="evenodd" d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708"/>
-                            </svg>
-                        </span>
-                        &nbsp;&nbsp;Proceed
-                    `;
-                    fetchButton.classList.remove('is-dark');
-                    fetchButton.classList.add('is-primary');
-
-                    // Hide and clear combo boxes
-                    const comboBoxes = [
-                        "#algorithmSelect",
-                        "#metricSelect",
-                        "#preprocessingSelect",
-                        "#algorithmSelect",
-                        "#algorithmPrepSelect",
-                        "#timeLimit",
-                        "#hyperparameterSelect",
-                        "#hyperLimit"
-                    ];
-                    
-                    comboBoxes.forEach(selector => {
-                        const comboBox = document.querySelector(selector);
-                        if (comboBox) {
-                            comboBox.innerHTML = ''; // Clear all options
-                        }
-                    });
-
-                    // Reset click count
-                    fetchClickCount = 0;
-
-                    // Update nextStepButton appearance and state
-                    const nextStepButton = document.querySelector("#nextStepButton");
-                    if (nextStepButton) {
-                        nextStepButton.disabled = true;
-                        nextStepButton.classList.remove('is-primary');
-                        nextStepButton.classList.add('is-light');
-                    }
-
-                    // Re-enable combo boxes (if you need to re-enable them later, otherwise this step is optional)
-                    comboBoxes.forEach(selector => {
-                        const comboBox = document.querySelector(selector);
-                        if (comboBox) {
-                            comboBox.disabled = false; // Re-enable the combo box
-                        }
-                    });
+                    resetForm();
                 }
 
             });
             function makePostRequest(fileName, intent) {
+                const fetchButton = document.querySelector("#fetchButton");
+                fetchButton.classList.add('is-loading')
+
+
                 fetch('/dashboard?step=actions/get_intent_metrics', {
                     method: 'POST',
                     headers: {
@@ -476,6 +506,7 @@
                     // Set the selected value based on preprocessingAlgorithm
                     const selectedValue = preprocessingAlgorithm ? "Yes" : "No";
                     setSelectedOption(preprocessingSelect, selectedValue);
+                    fetchButton.classList.remove('is-loading')
 
                     console.log('Algorithm:', algorithm);
                     console.log('Metric:', metric);
@@ -484,7 +515,9 @@
                 } else {
                     // Handle missing fields
                     console.error('Some fields are missing in the response:', data);
-                    alert('Error: Some fields are missing in the response.');
+                    alert('No recommendations are available for the selected input.');
+                    fetchButton.classList.remove('is-loading')
+
                 }
             })
                 .catch(error => {
@@ -548,6 +581,9 @@
         }
     
         function fetchValues() {
+            const fetchButton = document.querySelector("#fetchButton");
+            fetchButton.classList.add('is-loading')
+
             // Ensure selectedFileName is available
             if (!selectedFileName) {
                 console.error('No file selected.');
@@ -582,10 +618,12 @@
     
                 const intentSelect = document.querySelector("#intentSelect");
                 addOptionToSelect(intentSelect, data.intents);
+                fetchButton.classList.remove('is-loading')
 
                 //disable
                 dataSelect.disabled=true
                 intentSelect.disabled=true
+                
 
 
     
@@ -598,11 +636,15 @@
         window.submitCaptureIntent = function() {
             const problemDescription = document.querySelector("#problemDescription").value;
             const intentSelect = document.querySelector("#intentSelect");
+            const submitButton = document.getElementById('submitButton');
     
             if (problemDescription.trim() === "") {
                 alert("Please enter a problem description before submitting.");
                 return;
             }
+            submitButton.classList.add('is-loading')
+            resetForm()
+
     
             fetch('/dashboard?step=capture/predictIntent', {
                 method: 'POST',
@@ -625,13 +667,19 @@
                 const formattedIntent = intent.charAt(0).toUpperCase() + intent.slice(1);
                 // Check if intent is "unknown" or empty
                 if (!intent || intent.toLowerCase() === 'unknown') {
+                submitButton.classList.remove('is-loading')
+
                 responseContainer.innerHTML = '<p><b>Invalid input</b>. Please refine your problem description.</p>';
                 } else {
                 // Capitalize the first letter of the intent
+                submitButton.classList.remove('is-loading')
+
                 responseContainer.innerHTML = `<p> Predicted Intent: <b>${formattedIntent}</b></p>`;
                 nextButtonIntent.disabled=false;
                 nextButtonIntent.classList.remove('is-light');
                 nextButtonIntent.classList.add('is-primary');
+                submitButton.classList.remove('is-primary');
+                submitButton.classList.add('is-light');
 
                 }
                 // Helper function to add or select an option in the select element
@@ -704,16 +752,27 @@
         .then(response => response.json())
         .then(data => {
             console.log('Success:', data);
+            alert('Your workflow has been successfully saved.');
         })
         .catch(error => {
             console.error('Error saving workflow:', error);
+            alert('There was an error saving your workflow. Please try again.');
+
         });
     }
     function getWorkflowClick() {
-    // Get selected tool
+    var flowImage = document.getElementById("dataflowImageContainer");
+    var metric_result = document.getElementById("accuracyContainer");
+    var visualisation = document.getElementById("visualisationImageContainer");
     var selectedTool = document.getElementById("selectedTool").value;
     const saveWorkflowButton = document.querySelector("#saveWorkflow");
+    const generateWorkflowButton = document.querySelector("#generateWorkflow");
+    generateWorkflowButton.classList.add('is-loading');
+    saveWorkflowButton.disabled=true;
 
+    flowImage.innerHTML=''
+    metric_result.innerHTML=''
+    visualisation.innerHTML=''
     console.log("Selected Tool:", selectedTool);
 
     // Set URL based on selected tool
@@ -735,6 +794,8 @@
     .then(data => {
         
         console.log('Success:', data);
+        generateWorkflowButton.classList.remove('is-loading');
+
         if (selectedTool == 'hyperopt'){
             pipeline_results = data.results;
             var metricValue = data.results.metric_value.toFixed(2);
@@ -761,13 +822,13 @@
             metric = metricName;
         }
         // Update the Accuracy Container
-        document.getElementById("accuracyContainer").innerHTML = `
+        metric_result.innerHTML = `
             <div style="display: flex; justify-content: left;">
                 <strong>${metric}:</strong>&nbsp; ${metricValue}
             </div>`;
 
         // Update the Dataflow Image Container
-        document.getElementById("dataflowImageContainer").innerHTML = `
+        flowImage.innerHTML = `
             <div style='display: flex; justify-content: center;'>
                 <img src="${dataflowImagePath}" alt='Dataflow Image' style='width: 80%; height: 1.5cm;'>
             </div>`;
@@ -775,7 +836,7 @@
         console.log("Dataflow Image Path:", dataflowImagePath);
 
         // Update the Visualisation Image Container
-        document.getElementById("visualisationImageContainer").innerHTML = `
+        visualisation.innerHTML = `
             <div style='display: flex; justify-content: center;'>
                 <img src="${visualisationImagePath}" alt='Visualisation Image' style='width: 100%; height: 10cm;'>
             </div>`;
@@ -784,6 +845,11 @@
     })
     .catch((error) => {
         console.error('Error:', error);
+        generateWorkflowButton.classList.remove('is-loading');
+        flowImage.innerHTML=''
+    metric_result.innerHTML=''
+    visualisation.innerHTML=''
+
     });
 }
 
