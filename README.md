@@ -121,7 +121,7 @@ if __name__ == '__main__':
 ```
 In this example, the Flask application is configured to run on port 8004 and will display "Hello, World!" when accessed at the root URL.
 
-5. **Make requests to the new server**
+6. **Make requests to the new server**
 
 Now you can define route in the main application make requests to the new server:
 
