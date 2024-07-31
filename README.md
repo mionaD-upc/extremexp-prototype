@@ -87,7 +87,7 @@ curl -X GET http://localhost:8000
 
 ## Enhancing the Server Implementation
 
-The current implementation can be further improved by adjusting or adding new functionalities to the existing servers. Additionally, more servers can be linked to the prototype by following these steps:
+The current implementation can be further improved by adjusting or adding new functionalities to the existing servers. Additionally, more servers can be linked to the prototype.
 
 ### Adding New Functionalities to the Existing Servers
 
