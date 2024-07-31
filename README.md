@@ -67,14 +67,20 @@ The **start_servers.sh** script will automatically install the necessary require
 
 For detailed information about the API routes and functionality for each server, please refer to the specific **Markdown documentation** files located in their respective folders.
 
+(**optional**) You can also **start one server at a time**, installing the necessary packages and running the main script.
 
+As an example, the following commands will start llm server.
+```bash
+python3.11 -m pip install -r llm/requirements.txt
+python3.11 llm/api_llm_interaction.py
+```
 ### Navigate to the Main Application (web_app)
    In order to engage with application you should navigate your web browser to
 `http://localhost:8000` or you can use `curl`.
 
 ```bash
 curl -X GET http://localhost:8000
-```
+```bash
 
 ## Usage Guide
 [[Watch Video]](https://drive.google.com/file/d/1hEKr7KGFvUbbweNEbMF8r9jD_QV_9tU4/view?usp=sharing)
