@@ -85,3 +85,57 @@ curl -X GET http://localhost:8000
 ## Usage Guide
 [[Watch Video]](https://drive.google.com/file/d/1hEKr7KGFvUbbweNEbMF8r9jD_QV_9tU4/view?usp=sharing)
 
+## Enhancing the Server Implementation
+
+The current implementation can be further improved by adjusting or adding new functionalities to the existing servers. Additionally, more servers can be linked to the prototype by following these steps:
+
+### Adding New Functionalities to the Existing Servers
+
+### Setting Up and Interacting with a New Server
+
+1. Create a folder named `new_server` (or another name of your choice).
+
+2. Inside the `new_server` folder, create the following files:
+-  `requirements.txt` – This file will list the dependencies required for the server.
+- `api_interaction.py` – This script will contain the main server code.
+
+3. If you have specific functions you'd like to define and use within `api_interaction.py`, you can store these in a `utils` folder within `new_server`.
+4. Inside the `utils` folder, create Python files for your utility functions. For example, `helpers.py`.
+   
+```python
+def greet(name):
+    return f"Hello, {name}!"
+```
+5. Import and use the functions defined in the utils folder in your `api_interaction.py`
+      
+```python
+from flask import Flask
+from utils.helpers import greet
+
+app = Flask(__name__)
+
+@app.route('/')
+def hello_world():
+    return greet('World')
+
+if __name__ == '__main__':
+    app.run(port=8004, debug=True) # specify the port
+```
+In this example, the Flask application is configured to run on port 8004 and will display "Hello, World!" when accessed at the root URL.
+
+5. **Make requests to the new server**
+
+Now you can define route in the main application make requests to the new server:
+
+```python
+@main.route('/call-server')
+def call_server():
+    try:
+        response = requests.get('http://localhost:8004')
+        return jsonify({
+            'status': response.status_code,
+            'data': response.text
+        })
+    except requests.RequestException as e:
+        return jsonify({'error': str(e)}), 500
+```
