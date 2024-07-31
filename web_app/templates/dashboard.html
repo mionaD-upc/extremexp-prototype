@@ -262,8 +262,6 @@
     </section>
     <script>
         let fetchClickCount = 0;
-
-        // Function to handle the reset action
         function resetForm() {
                 const fetchButton = document.querySelector("#fetchButton");
                 const comboBoxes = [
@@ -276,7 +274,6 @@
                     "#hyperLimit"
                 ];
                 
-                // Update fetchButton appearance
                 fetchButton.innerHTML = `
                     <span class="icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-double-right" viewBox="0 0 16 16">
@@ -301,7 +298,6 @@
                 // Reset click count
                 fetchClickCount = 0;
 
-                // Update nextStepButton appearance and state
                 const nextStepButton = document.querySelector("#nextStepButton");
                 if (nextStepButton) {
                     nextStepButton.disabled = true;
@@ -309,7 +305,6 @@
                     nextStepButton.classList.add('is-light');
                 }
             }
-        // Define global variables
         let selectedFileName = ''; // Global variable to store file name
         let selectedFileName_file_path = '';
         let = pipeline_results = {}
@@ -342,7 +337,7 @@
             // Set up file input event listener
             const fileInput = document.querySelector("#fileInput");
             const fileName = document.querySelector("#fileName");
-            const nextButton = document.querySelector("#nextButton");  // Get the Next button
+            const nextButton = document.querySelector("#nextButton"); 
             const intent = document.querySelector("#intentSelect")
 
     
@@ -371,7 +366,6 @@
                         nextButton.classList.remove('is-light');
                         nextButton.classList.add('is-primary');
 
-                        // Add the selected file name to the dataSelect options
                         const dataSelect = document.querySelector("#dataSelect");
                         const option = new Option(file.name, file.name);
                         dataSelect.add(option, undefined);
@@ -397,9 +391,7 @@
 
                 
                 if (fetchClickCount === 1) {
-                    // if intent has value call other functions to get values
 
-                     // Call function to make POST request with fileName and intent
                     makePostRequest(selectedFileName, document.querySelector("#intentSelect").value);
 
                     document.querySelector("#metricField").style.display = 'block';
@@ -451,35 +443,28 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                // Check if the response contains the expected fields
                 if (data.algorithm && data.metric && data.preprocessing && data.preprocessing_algorithm) {
-                    // Retrieve the values of each field
                     const algorithm = data.algorithm;
                     const metric = data.metric;
                     const preprocessing = data.preprocessing;
                     const preprocessingStatus = preprocessing ? 'Yes' : 'No';
                     const preprocessingAlgorithm = data.preprocessing_algorithm;
 
-                    // Get the select elements
                     const algorithmSelect = document.querySelector("#algorithmSelect");
                     const metricSelect = document.querySelector("#metricSelect");
                     const preprocessingSelect = document.querySelector("#preprocessingSelect");
                     const algorithmPrepSelect = document.querySelector("#algorithmPrepSelect");
 
                     function addOptionToSelect(selectElement, value) {
-                        // Check if the select element exists
                         if (!selectElement) {
                             console.error('Select element is null or undefined');
                             return;
                         }
                         
-                        // Check if the select element has any options
                         if (selectElement.options.length === 0) {
-                            // If no options exist, directly add the new option
                             const option = new Option(value, value);
                             selectElement.add(option);
                         } else {
-                            // Check if the option already exists
                             const existingOptions = Array.from(selectElement.options).map(option => option.value);
                             if (!existingOptions.includes(value)) {
                                 const option = new Option(value, value);
@@ -488,22 +473,17 @@
                         }
                     }
 
-
-                    // Function to set the selected value of a select element
                     function setSelectedOption(selectElement, value) {
                         selectElement.value = value;
                     }
-                    // Add options to the select elements
                     addOptionToSelect(algorithmSelect, algorithm);
                     addOptionToSelect(metricSelect, metric);
                     addOptionToSelect(algorithmPrepSelect, preprocessingAlgorithm);
 
 
-                    // Ensure "Yes" and "No" options exist in algorithmPrepSelect
                     addOptionToSelect(preprocessingSelect, "Yes");
                     addOptionToSelect(preprocessingSelect, "No");
 
-                    // Set the selected value based on preprocessingAlgorithm
                     const selectedValue = preprocessingAlgorithm ? "Yes" : "No";
                     setSelectedOption(preprocessingSelect, selectedValue);
                     fetchButton.classList.remove('is-loading')
@@ -602,9 +582,7 @@
             .then(data => {
                 console.log('Values fetched successfully:', data);
     
-                // Function to add a single option to a select element if it doesn't already exist
                 function addOptionToSelect(selectElement, value) {
-                        // Check if the option already exists
                         const existingOptions = Array.from(selectElement.options).map(option => option.value);
                         if (!existingOptions.includes(value)) {
                             const option = new Option(value, value);
@@ -612,7 +590,6 @@
                         }
                     }          
     
-                // Populate select elements with fetched data
                 const dataSelect = document.querySelector("#dataSelect");
                 addOptionToSelect(dataSelect, data.data);
     
@@ -620,7 +597,6 @@
                 addOptionToSelect(intentSelect, data.intents);
                 fetchButton.classList.remove('is-loading')
 
-                //disable
                 dataSelect.disabled=true
                 intentSelect.disabled=true
                 
@@ -660,18 +636,15 @@
             .then(data => {
                 console.log('Capture Intent submitted successfully:', data);
                 const responseContainer = document.querySelector("#responseContainer");
-                // Check for an 'intent' field in the response
                 const intent = data.intent || '';
-                const nextButtonIntent = document.querySelector("#nextButtonIntent");  // Get the Next button
+                const nextButtonIntent = document.querySelector("#nextButtonIntent");
                 nextButtonIntent.disabled=true;
                 const formattedIntent = intent.charAt(0).toUpperCase() + intent.slice(1);
-                // Check if intent is "unknown" or empty
                 if (!intent || intent.toLowerCase() === 'unknown') {
                 submitButton.classList.remove('is-loading')
 
                 responseContainer.innerHTML = '<p><b>Invalid input</b>. Please refine your problem description.</p>';
                 } else {
-                // Capitalize the first letter of the intent
                 submitButton.classList.remove('is-loading')
 
                 responseContainer.innerHTML = `<p> Predicted Intent: <b>${formattedIntent}</b></p>`;
@@ -682,16 +655,13 @@
                 submitButton.classList.add('is-light');
 
                 }
-                // Helper function to add or select an option in the select element
                 function addOrSelectOption(selectElement, value) {
                     const existingOptions = Array.from(selectElement.options);
                     const existingOption = existingOptions.find(option => option.value === value);
                     
                     if (existingOption) {
-                        // If option exists, select it
                         selectElement.value = value;
                     } else {
-                        // If option doesn't exist, add it and then select it
                         const newOption = new Option(value, value);
                         selectElement.add(newOption, undefined);
                         selectElement.value = value;
@@ -789,7 +759,7 @@
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        return response.json(); // Parse response as JSON
+        return response.json();
     })
     .then(data => {
         
