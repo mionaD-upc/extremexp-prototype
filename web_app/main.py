@@ -58,6 +58,7 @@ def dashboard():
             
     elif request.method == 'POST':
         # Handle POST request
+        
         if step == 'upload/fileName':
             file = request.files.get('file')
             file_name = request.form.get('fileName')
@@ -154,7 +155,6 @@ def dashboard():
             except requests.exceptions.RequestException as e:
                 print(f'Error: {str(e)}')
 
-            # Return the response data as JSON
             return jsonify(response_data)
         
         elif step == 'actions/get_intent_metrics':
