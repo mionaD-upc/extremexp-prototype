@@ -69,7 +69,7 @@ For detailed information about the API routes and functionality for each server,
 
 (**optional**) You can also **start one server at a time**, installing the necessary packages and running the main script.
 
-As an example, the following commands will start llm server.
+As an example, the following commands will start the *llm server*.
 ```bash
 python3.11 -m pip install -r llm/requirements.txt
 python3.11 llm/api_llm_interaction.py
