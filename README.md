@@ -89,8 +89,6 @@ curl -X GET http://localhost:8000
 
 The current implementation can be further improved by adjusting or adding new functionalities to the existing servers. Additionally, more servers can be linked to the prototype.
 
-### Adding New Functionalities to the Existing Servers
-
 ### Setting Up and Interacting with a New Server
 
 1. Create a folder named `new_server` (or another name of your choice).
@@ -139,3 +137,15 @@ def call_server():
     except requests.RequestException as e:
         return jsonify({'error': str(e)}), 500
 ```
+
+### Adding New Functionalities to the Existing Servers
+
+Adding new functionalities can be achieved in the same manner: 
+
+1. **Add a New Function**: Create a new function in the `utils` module.
+
+2. **Import the Function**: Import this function into the API script of the server.
+
+3. **Define a New Route**: In the API script, define a new route that uses the imported function.
+
+4. **Update the Main App**: In the main application, add a new route that makes requests to the server using the new endpoint you defined.
