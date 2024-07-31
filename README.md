@@ -77,3 +77,4 @@ curl -X GET http://localhost:8000
 ```
 
 ## Usage Guide
+[![Watch Video](https://github.com/mionaD-upc/extremexp-prototype/blob/main/assets/thumbnail.jpg)](https://drive.google.com/file/d/1hEKr7KGFvUbbweNEbMF8r9jD_QV_9tU4/view?usp=sharing)
