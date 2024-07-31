@@ -80,7 +80,7 @@ python3.11 llm/api_llm_interaction.py
 
 ```bash
 curl -X GET http://localhost:8000
-```bash
+```
 
 ## Usage Guide
 [[Watch Video]](https://drive.google.com/file/d/1hEKr7KGFvUbbweNEbMF8r9jD_QV_9tU4/view?usp=sharing)
