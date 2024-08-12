@@ -85,6 +85,8 @@ curl -X GET http://localhost:8000
 ## Usage Guide
 [[Watch Video]](https://drive.google.com/file/d/1hEKr7KGFvUbbweNEbMF8r9jD_QV_9tU4/view?usp=sharing)
 
+For between server communication, refer to the diagram  ```static/diagram-drawio.png```.
+
 ## Enhancing the Server Implementation
 
 The current implementation can be further improved by adjusting or adding new functionalities to the existing servers. Additionally, more servers can be linked to the prototype.
